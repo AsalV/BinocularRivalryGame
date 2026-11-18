@@ -1,0 +1,25 @@
+{
+	"Version": 1,
+	"Namespaces": [
+		{
+			"Name": "Mac",
+			"DisplayName": "macOS\u00ae",
+			"Doc": "Runtime options specific to the macOS\u00ae platform.",
+			"ConditionalMacro": "AK_MAC_OS_X",
+			"KeyStart": 4352,
+			"NumOptions": 1,
+			"Visibility": "Advanced",
+			"Options": [
+				{
+					"Name": "EnableAVAudioEngine",
+					"DisplayName": "Enable AVAudioEngine",
+					"Visibility": "Advanced",
+					"Type": "Boolean",
+					"Doc": "Allow using AVAudioEngine API when the operating system supports it (macOS 10.15 and above).\n\nWhen AVAudioEngine is enabled and available, 3D Audio can be used on macOS via Apple Spatial Audio technology.",
+					"DefaultValue": true,
+					"Key": 4352
+				}
+			]
+		}
+	]
+}

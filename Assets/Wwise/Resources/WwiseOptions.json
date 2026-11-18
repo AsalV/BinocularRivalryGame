@@ -1,0 +1,16 @@
+{
+  "Version": 1,
+  "Namespaces": [
+    {
+      "Name": "Acoustics",
+      "Options": [
+        {
+          "Name": "Enable",
+          "Type": "Boolean",
+          "DefaultValue": true,
+          "Key": 3328
+        }
+      ]
+    }
+  ]
+}

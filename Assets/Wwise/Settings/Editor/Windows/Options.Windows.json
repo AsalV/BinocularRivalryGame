@@ -1,0 +1,25 @@
+{
+	"Version": 1,
+	"Namespaces": [
+		{
+			"Name": "Windows",
+			"DisplayName": "Windows\u00ae",
+			"Doc": "Runtime options specific to the Windows\u00ae platform.",
+			"ConditionalMacro": "AK_WIN",
+			"KeyStart": 4352,
+			"NumOptions": 1,
+			"Visibility": "Advanced",
+			"Options": [
+				{
+					"Name": "EnableAVX",
+					"DisplayName": "Enable AVX",
+					"Visibility": "Advanced",
+					"Type": "Boolean",
+					"Doc": "Enables run-time detection of AVX and AVX2 SIMD support in the engine and plug-ins.",
+					"DefaultValue": true,
+					"Key": 4352
+				}
+			]
+		}
+	]
+}

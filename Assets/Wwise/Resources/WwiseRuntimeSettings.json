@@ -1,0 +1,111 @@
+{
+  "Version": 1,
+  "Namespaces": [
+    {
+      "Name": "IntegrationBanks",
+      "DisplayName": "Banks",
+      "Visibility": "Default",
+      "Options": [
+        {
+          "Name": "IsAutoBankEnabled",
+          "DisplayName": "AutoBank Enabled",
+          "Visibility": "Default",
+          "Type": "Boolean",
+          "DefaultValue": true
+        },
+        {
+          "Name": "IsDecodedBankEnabled",
+          "DisplayName": "Decode Bank Enabled",
+          "Visibility": "Default",
+          "Type": "Boolean",
+          "DefaultValue": false
+        },
+        {
+          "Name": "LoadBanksAsynchronously",
+          "DisplayName": "Load Banks Asynchronously",
+          "Visibility": "Advanced",
+          "Type": "Boolean",
+          "DefaultValue": false
+        },
+        {
+          "Name": "SoundBanksBasePath",
+          "DisplayName": "SoundBanks Base Path",
+          "Visibility": "Default",
+          "Type": "String",
+          "DefaultValue": "Audio/GeneratedSoundBanks"
+        },
+        {
+          "Name": "SoundBankPersistentDataPath",
+          "DisplayName": "SoundBanks Persistent Base Path",
+          "Visibility": "Advanced",
+          "Type": "String",
+          "DefaultValue": ""
+        }
+      ]
+    },
+    {
+      "Name": "IntegrationFocusLoss",
+      "DisplayName": "Focus Loss",
+      "Visibility": "Default",
+      "Options": [
+        {
+          "Name": "RenderDuringFocusLoss",
+          "DisplayName": "Render Audio During Focus Loss",
+          "Visibility": "Advanced",
+          "Type": "Boolean",
+          "DefaultValue": false
+        },
+        {
+          "Name": "SuspendAudioDuringFocusLoss",
+          "DisplayName": "Suspend Audio During Focus Loss",
+          "Visibility": "Advanced",
+          "Type": "Boolean",
+          "DefaultValue": true
+        }
+      ]
+    },
+    {
+      "Name": "IntegrationLogging",
+      "DisplayName": "Logging",
+      "Visibility": "Default",
+      "Options": [
+        {
+          "Name": "IsEngineLoggingEnabled",
+          "DisplayName": "Engine Logging Enabled",
+          "Visibility": "Default",
+          "Type": "Boolean",
+          "DefaultValue": true
+        },
+        {
+          "Name": "WwiseLoggerLevel",
+          "DisplayName": "Wwise Logger Level",
+          "Visibility": "Default",
+          "Type": "String",
+          "DefaultValue": "Log"
+        }
+      ]
+    },
+    {
+      "Name": "Integration",
+      "DisplayName": "Miscellaneous",
+      "Visibility": "Default",
+      "Options": [
+        {
+          "Name": "DefaultListenerScalingFactor",
+          "DisplayName": "Default Listener Scaling Factor",
+          "Visibility": "Default",
+          "MinValue": 0.0,
+          "Type": "Real",
+          "DefaultValue": 1.0
+        },
+        {
+          "Name": "StartupLanguage",
+          "DisplayName": "Startup Language",
+          "Visibility": "Default",
+          "Type": "String",
+          "DefaultValue": "English(US)"
+        }
+      ]
+    }
+  ]
+}

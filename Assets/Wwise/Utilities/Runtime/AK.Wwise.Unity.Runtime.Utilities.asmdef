@@ -1,0 +1,20 @@
+{
+    "name": "AK.Wwise.Unity.Utilities",
+    "rootNamespace": "",
+    "references": [
+        "AK.Wwise.Unity.Logging",
+        "AK.Wwise.Unity.Settings.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [
+        "Lumin",
+        "Stadia"
+    ],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

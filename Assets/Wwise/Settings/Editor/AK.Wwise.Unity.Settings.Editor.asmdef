@@ -1,0 +1,19 @@
+{
+    "name": "AK.Wwise.Unity.Settings.Editor",
+    "rootNamespace": "",
+    "references": [
+        "AK.Wwise.Unity.API",
+        "AK.Wwise.Unity.Logging",
+        "AK.Wwise.Unity.Settings.Runtime",
+        "AK.Wwise.Unity.Utilities"
+    ],
+    "includePlatforms": ["Editor"],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

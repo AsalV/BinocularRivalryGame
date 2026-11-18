@@ -1,0 +1,22 @@
+{
+    "name": "AK.Wwise.Unity.Settings.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "AK.Wwise.Unity.Logging"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.nuget.newtonsoft-json",
+            "expression": "3.0.0",
+            "define": "AK_NEWTONSOFT_JSON"
+        }
+    ],
+    "noEngineReferences": false
+}

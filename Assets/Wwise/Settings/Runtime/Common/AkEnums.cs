@@ -1,0 +1,103 @@
+/*******************************************************************************
+The content of this file includes portions of the proprietary AUDIOKINETIC Wwise
+Technology released in source code form as part of the game integration package.
+The content of this file may not be used without valid licenses to the
+AUDIOKINETIC Wwise Technology.
+Note that the use of the game engine is subject to the Unity(R) Terms of
+Service at https://unity3d.com/legal/terms-of-service
+
+License Usage
+
+Licensees holding valid licenses to the AUDIOKINETIC Wwise Technology may use
+this file in accordance with the end user license agreement provided with the
+software or, alternatively, in accordance with the terms contained
+in a written agreement between you and Audiokinetic Inc.
+Copyright (c) 2026 Audiokinetic Inc.
+*******************************************************************************/
+
+namespace Wwise.SDK
+{
+    public enum AKRESULT : uint
+    {
+        AK_NotImplemented = 0,
+        AK_Success = 1,
+        AK_Fail = 2,
+        AK_PartialSuccess = 3,
+        AK_NotCompatible = 4,
+        AK_AlreadyConnected = 5,
+        AK_InvalidFile = 7,
+        AK_AudioFileHeaderTooLarge = 8,
+        AK_MaxReached = 9,
+        AK_InvalidID = 14,
+        AK_IDNotFound = 15,
+        AK_InvalidInstanceID = 16,
+        AK_NoMoreData = 17,
+        AK_InvalidStateGroup = 20,
+        AK_ChildAlreadyHasAParent = 21,
+        AK_InvalidLanguage = 22,
+        AK_CannotAddItselfAsAChild = 23,
+        AK_InvalidParameter = 31,
+        AK_ElementAlreadyInList = 35,
+        AK_PathNotFound = 36,
+        AK_PathNoVertices = 37,
+        AK_PathNotRunning = 38,
+        AK_PathNotPaused = 39,
+        AK_PathNodeAlreadyInList = 40,
+        AK_PathNodeNotInList = 41,
+        AK_DataNeeded = 43,
+        AK_NoDataNeeded = 44,
+        AK_DataReady = 45,
+        AK_NoDataReady = 46,
+        AK_InsufficientMemory = 52,
+        AK_Cancelled = 53,
+        AK_UnknownBankID = 54,
+        AK_BankReadError = 56,
+        AK_InvalidSwitchType = 57,
+        AK_FormatNotReady = 63,
+        AK_WrongBankVersion = 64,
+        AK_FileNotFound = 66,
+        AK_DeviceNotReady = 67,
+        AK_BankAlreadyLoaded = 69,
+        AK_RenderedFX = 71,
+        AK_ProcessNeeded = 72,
+        AK_ProcessDone = 73,
+        AK_MemManagerNotInitialized = 74,
+        AK_StreamMgrNotInitialized = 75,
+        AK_SSEInstructionsNotSupported = 76,
+        AK_Busy = 77,
+        AK_UnsupportedChannelConfig = 78,
+        AK_PluginMediaNotAvailable = 79,
+        AK_MustBeVirtualized = 80,
+        AK_CommandTooLarge = 81,
+        AK_RejectedByFilter = 82,
+        AK_InvalidCustomPlatformName = 83,
+        AK_DLLCannotLoad = 84,
+        AK_DLLPathNotFound = 85,
+        AK_NoJavaVM = 86,
+        AK_OpenSLError = 87,
+        AK_PluginNotRegistered = 88,
+        AK_DataAlignmentError = 89,
+        AK_DeviceNotCompatible = 90,
+        AK_DuplicateUniqueID = 91,
+        AK_InitBankNotLoaded = 92,
+        AK_DeviceNotFound = 93,
+        AK_PlayingIDNotFound = 94,
+        AK_InvalidFloatValue = 95,
+        AK_FileFormatMismatch = 96,
+        AK_NoDistinctListener = 97,
+        AK_ResourceInUse = 99,
+        AK_InvalidBankType = 100,
+        AK_AlreadyInitialized = 101,
+        AK_NotInitialized = 102,
+        AK_FilePermissionError = 103,
+        AK_UnknownFileError = 104,
+        AK_TooManyConcurrentOperations = 105,
+        AK_InvalidFileSize = 106,
+        AK_Deferred = 107,
+        AK_FilePathTooLong = 108,
+        AK_InvalidState = 109,
+        AK_AcousticsUnavailable = 110,
+        AK_SpatialAudioUnavailable = 110,
+        AKRESULT_Last = 111,
+    }
+}

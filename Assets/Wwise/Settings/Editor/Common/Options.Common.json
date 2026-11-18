@@ -1,0 +1,1873 @@
+{
+	"Version": 1,
+	"Namespaces": [
+		{
+			"Name": "MemoryMgr",
+			"DisplayName": "Memory Manager",
+			"Doc": "Options for the MemoryMgr module.",
+			"KeyStart": 0,
+			"NumOptions": 3,
+			"Visibility": "Advanced",
+			"Options": [
+				{
+					"Name": "Hooks",
+					"DisplayName": "Hooks",
+					"Visibility": "Hidden",
+					"Type": "Pointer",
+					"Doc": "Function hooks for MemoryMgr. Must be a pointer to an instance of AkMemoryMgrHooks. See documentation for AkMemoryMgrHooks for details.",
+					"DefaultValue": null,
+					"Key": 0
+				},
+				{
+					"Name": "DebugLevel",
+					"DisplayName": "Debug Level",
+					"Visibility": "Advanced",
+					"MinValue": 0,
+					"MaxValue": 3,
+					"Type": "Integer",
+					"Doc": "Memory debugging level. 0 = disabled. A value of 1 tracks memory allocations to identify memory leaks. A value of 2 activates memory stomp detection. A value of 3 enables both memory leak tracking and stomp detection.",
+					"DefaultValue": 0,
+					"Key": 1
+				},
+				{
+					"Name": "StompDebugMemIDMask",
+					"DisplayName": "Stomp Debug MemID Mask",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Bitmask indicating which AkMemID allocation should go through the stomp allocator. Defaults to all MemIDs.",
+					"DefaultValue": 4294967295,
+					"Key": 2
+				}
+			]
+		},
+		{
+			"Name": "TempAlloc",
+			"DisplayName": "Temp Allocator",
+			"Doc": "Options for the TempAlloc sub-module of MemoryMgr.",
+			"KeyStart": 256,
+			"NumOptions": 8,
+			"Visibility": "Hidden",
+			"Options": [
+				{
+					"Name": "MinimumBlockCount",
+					"DisplayName": "Minimum Block Count",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The number of blocks of memory the system is initialized with and is the minimum kept around forever. Higher values increase upfront memory use, but can reduce, or eliminate, the creation and destruction of memory blocks over time.",
+					"DefaultValue": 1,
+					"Key": 256
+				},
+				{
+					"Name": "MinimumBlockSize",
+					"DisplayName": "Minimum Block Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The minimum size of each block. If a new allocation requests a new block of memory, then the new block is the size of the requested allocation times four, and then rounded up to the next multiple of this value. Defaults to 512 KiB.",
+					"DefaultValue": 524288,
+					"Key": 257
+				},
+				{
+					"Name": "MaximumUnusedBlocks",
+					"DisplayName": "Maximum Unused Blocks",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The maximum number of blocks that the system keeps in an unused state, and avoids freeing. Higher values do not increase the peak memory use, but do prevent unused memory from being freed, in order to reduce creation and destruction of memory blocks.",
+					"DefaultValue": 1,
+					"Key": 258
+				},
+				{
+					"Name": "EnableDebugDetailedStats",
+					"DisplayName": "Enable Debug Detailed Stats",
+					"Visibility": "Hidden",
+					"Type": "Boolean",
+					"Doc": "Track detailed stats and include them in the detailed stat dump. Detailed stats include the size and quantity of each type of allocation from the system.",
+					"DefaultValue": false,
+					"Key": 259
+				},
+				{
+					"Name": "EnableDebugClearMemory",
+					"DisplayName": "Enable Debug Clear Memory",
+					"Visibility": "Hidden",
+					"Type": "Boolean",
+					"Doc": "Enable to clear any allocation to a deterministic garbage value. Useful to make sure memory is initialized properly.",
+					"DefaultValue": false,
+					"Key": 260
+				},
+				{
+					"Name": "EnableDebugSentinels",
+					"DisplayName": "Enable Debug Sentinels",
+					"Visibility": "Hidden",
+					"Type": "Boolean",
+					"Doc": "Enable to write out sentinels between most allocations to help detect memory overwrites, verified at the end of a tick. Increases memory usage of blocks slightly.",
+					"DefaultValue": false,
+					"Key": 261
+				},
+				{
+					"Name": "EnableDebugFlushBlocks",
+					"DisplayName": "Enable Debug Flush Blocks",
+					"Visibility": "Hidden",
+					"Type": "Boolean",
+					"Doc": "Enable to forcefully release all blocks at the end of a tick and recreate them from scratch every tick. Useful to ensure stale memory is not being accessed. This might interfere with some stats reporting due to blocks being released between ticks.",
+					"DefaultValue": false,
+					"Key": 262
+				},
+				{
+					"Name": "EnableDebugStandaloneAllocs",
+					"DisplayName": "Enable Debug Standalone Allocs",
+					"Visibility": "Hidden",
+					"Type": "Boolean",
+					"Doc": "Force the block size to be as small as possible for each allocation (smaller than can be achieved by just setting uMinimumBlockSize to very low values). Useful to investigate memory overruns in-depth, especially in conjunction with other options like bDebugFlushBlocks and the MemoryMgr's stomp allocator. If enabled, bDebugDetailedStats and bDebugEnableSentinels will be disabled. Greatly increases CPU and memory usage.",
+					"DefaultValue": false,
+					"Key": 263
+				}
+			]
+		},
+		{
+			"Name": "BookmarkAlloc",
+			"DisplayName": "Bookmark Allocator",
+			"Doc": "Options for the BookmarkAlloc sub-module of MemoryMgr.",
+			"KeyStart": 512,
+			"NumOptions": 7,
+			"Visibility": "Hidden",
+			"Options": [
+				{
+					"Name": "MinimumBlockCount",
+					"DisplayName": "Minimum Block Count",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The number of blocks of memory the system is initialized with and is the minimum kept around forever. Defaults to 1. Higher values increase upfront memory use, but can reduce, or eliminate, the creation and destruction of memory blocks over time.",
+					"DefaultValue": 1,
+					"Key": 512
+				},
+				{
+					"Name": "MinimumBlockSize",
+					"DisplayName": "Minimum Block Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The minimum size of each block. If a new allocation requests a new block of memory, then the new block is the size of the requested allocation times four, and then rounded up to the next multiple of this value. Defaults to 128 KiB.",
+					"DefaultValue": 131072,
+					"Key": 513
+				},
+				{
+					"Name": "MaximumUnusedBlocks",
+					"DisplayName": "Maximum Unused Blocks",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The maximum number of blocks that the system keeps in an unused state, and avoids freeing. Defaults to 1. Higher values do not increase the peak memory use, but do prevent unused memory from being freed, in order to reduce creation and destruction of memory blocks.",
+					"DefaultValue": 1,
+					"Key": 514
+				},
+				{
+					"Name": "DebugDetailedStats",
+					"DisplayName": "Debug Detailed Stats",
+					"Visibility": "Hidden",
+					"Type": "Boolean",
+					"Doc": "Track detailed stats, specifically collection of Stats::uRecentPeakMemUsed. Enabled by default.",
+					"DefaultValue": false,
+					"Key": 515
+				},
+				{
+					"Name": "DebugClearMemory",
+					"DisplayName": "Debug Clear Memory",
+					"Visibility": "Hidden",
+					"Type": "Boolean",
+					"Doc": "Clear any allocation to a deterministic garbage value during allocs, and after the stack is rewound to a bookmark. Useful to make sure memory is initialized properly.",
+					"DefaultValue": false,
+					"Key": 516
+				},
+				{
+					"Name": "DebugEnableSentinels",
+					"DisplayName": "Debug Enable Sentinels",
+					"Visibility": "Hidden",
+					"Type": "Boolean",
+					"Doc": "Write out sentinels between most allocations to help detect memory overwrites, which are verified at the termination of a bookmark alloc region. Increases memory usage of blocks slightly.",
+					"DefaultValue": false,
+					"Key": 517
+				},
+				{
+					"Name": "DebugStandaloneAllocs",
+					"DisplayName": "Debug Standalone Allocs",
+					"Visibility": "Hidden",
+					"Type": "Boolean",
+					"Doc": "Force the block size to be as small as possible for each allocation (smaller than can be achieved by just setting uMinimumBlockSize to very low values). Useful to investigate memory overruns in-depth, especially in conjunction with the MemoryMgr's stomp allocator. If enabled, bDebugEnableSentinels will be disabled. Greatly increases CPU and memory usage.",
+					"DefaultValue": false,
+					"Key": 518
+				}
+			]
+		},
+		{
+			"Name": "MemoryArena_Primary",
+			"DisplayName": "Memory Arena (Primary)",
+			"Doc": "Options for the MemoryArena responsible for generic allocations within the Sound Engine.",
+			"KeyStart": 768,
+			"NumOptions": 14,
+			"Visibility": "Hidden",
+			"Options": [
+				{
+					"Name": "Hooks",
+					"DisplayName": "Hooks",
+					"Visibility": "Hidden",
+					"Type": "Pointer",
+					"Doc": "Function hooks for this MemoryArena. Must be a pointer to an instance of AkMemoryArenaHooks. See documentation for AkMemoryArenaHooks for details.",
+					"DefaultValue": null,
+					"Key": 768
+				},
+				{
+					"Name": "EnableSba",
+					"DisplayName": "Enable Sba",
+					"Visibility": "Hidden",
+					"Type": "Boolean",
+					"Doc": "Used to determine if the SbaHeap should be initialized and utilized at all. If disabled, all small allocs (size < kAllocSizeMedium) will go into the TlsfHeap and be treated as Medium allocs.",
+					"DefaultValue": true,
+					"Key": 769
+				},
+				{
+					"Name": "SbaInitSize",
+					"DisplayName": "Sba Init Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The size of the initial allocation of memory for the small block allocator (SBA). This allocation will be made inside the main TLSF heap, and will always persist. Sub-allocations that fit in this range will have better fragmentation characteristics, and an overall reduction in memory overhead. This does not have to be a power-of-two.",
+					"DefaultValue": 2097152,
+					"Key": 770
+				},
+				{
+					"Name": "SbaSpanSize",
+					"DisplayName": "Sba Span Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The size of each span of memory for the SBA. Each span has a unique size class. Lower values can slightly increase the overhead of initializing SBA allocations, but can reduce overall memory reservation. This must be a power-of-two.",
+					"DefaultValue": 16384,
+					"Key": 771
+				},
+				{
+					"Name": "SbaMaximumUnusedSpans",
+					"DisplayName": "Sba Maximum Unused Spans",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The maximum number of SBA spans that the system keeps in an unused state, and avoids freeing. Higher values do not increase the peak memory use, but do prevent unused memory from being freed, in order to reduce creation and destruction of SBA spans.",
+					"DefaultValue": 1,
+					"Key": 772
+				},
+				{
+					"Name": "TlsfInitSize",
+					"DisplayName": "Tlsf Init Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The size of the initial span of memory requested for the main TLSF heap. This span will always persist. (does not have to be a power-of-two).",
+					"DefaultValue": 8388608,
+					"Key": 773
+				},
+				{
+					"Name": "TlsfSpanSize",
+					"DisplayName": "Tlsf Span Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "When a memory allocation cannot fit in the main TLSF heap, and is a medium-sized allocation, new spans requested will be a multiple of this size (does not have to be a power-of-two).",
+					"DefaultValue": 2097152,
+					"Key": 774
+				},
+				{
+					"Name": "TlsfLargeSpanSize",
+					"DisplayName": "Tlsf Large Span Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "When a memory allocation cannot fit in the main TLSF heap, and is a large-sized allocation, new spans requested will be a multiple of this size (does not have to be a power-of-two).",
+					"DefaultValue": 8388608,
+					"Key": 775
+				},
+				{
+					"Name": "TlsfSpanOverhead",
+					"DisplayName": "Tlsf Span Overhead",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The amount of allocation overhead assumed for each span. When new spans for TLSF are requested, this is subtracted from the size of the requested span, after multiplying the requested size up by uPageSize.",
+					"DefaultValue": 128,
+					"Key": 776
+				},
+				{
+					"Name": "TlsfMaximumUnusedMediumSpans",
+					"DisplayName": "Tlsf Maximum Unused Medium Spans",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The maximum number of Medium spans that the system keeps in an unused state, and avoids freeing. Higher values do not increase the peak memory use, but do prevent unused memory from being freed, in order to reduce creation and destruction of medium spans.",
+					"DefaultValue": 1,
+					"Key": 777
+				},
+				{
+					"Name": "TlsfMaximumUnusedLargeSpans",
+					"DisplayName": "Tlsf Maximum Unused Large Spans",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The maximum number of Large spans that the system keeps in an unused state, and avoids freeing. Higher values do not increase the peak memory use, but do prevent unused memory from being freed, in order to reduce creation and destruction of large spans.",
+					"DefaultValue": 1,
+					"Key": 778
+				},
+				{
+					"Name": "AllocSizeLarge",
+					"DisplayName": "Alloc Size Large",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Defines the minimum size for an allocation to qualify as Large. Default to UINT_MAX, so that all large allocs are treated as Medium allocs. Large allocs go into best-fit searches, same as medium allocations, but will go to a separate list of secondary spans, distinct from Medium allocations.",
+					"DefaultValue": 4294967295,
+					"Key": 779
+				},
+				{
+					"Name": "AllocSizeHuge",
+					"DisplayName": "Alloc Size Huge",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Defines the minimum size for an allocation to qualify as Huge. Huge allocs always go into standalone spans even if there is space available in an existing span.",
+					"DefaultValue": 4194304,
+					"Key": 780
+				},
+				{
+					"Name": "MemReservedLimit",
+					"DisplayName": "Mem Reserved Limit",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The limit on how much memory will be reserved by this arena. If a request for to reserve more memory is made that would go over this limit, a nullptr is returned. If set to zero, no limit is in place.",
+					"DefaultValue": 0,
+					"Key": 781
+				}
+			]
+		},
+		{
+			"Name": "MemoryArena_Media",
+			"DisplayName": "Memory Arena (Media)",
+			"Doc": "Options for the MemoryArena responsible for allocations pertaining to media management within the Sound Engine.",
+			"KeyStart": 1024,
+			"NumOptions": 14,
+			"Visibility": "Hidden",
+			"Options": [
+				{
+					"Name": "Hooks",
+					"DisplayName": "Hooks",
+					"Visibility": "Hidden",
+					"Type": "Pointer",
+					"Doc": "Function hooks for this MemoryArena. Must be a pointer to an instance of AkMemoryArenaHooks. See documentation for AkMemoryArenaHooks for details.",
+					"DefaultValue": null,
+					"Key": 1024
+				},
+				{
+					"Name": "EnableSba",
+					"DisplayName": "Enable Sba",
+					"Visibility": "Hidden",
+					"Type": "Boolean",
+					"Doc": "Used to determine if the SbaHeap should be initialized and utilized at all. If disabled, all small allocs (size < kAllocSizeMedium) will go into the TlsfHeap and be treated as Medium allocs.",
+					"DefaultValue": false,
+					"Key": 1025
+				},
+				{
+					"Name": "SbaInitSize",
+					"DisplayName": "Sba Init Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The size of the initial allocation of memory for the small block allocator (SBA). This allocation will be made inside the main TLSF heap, and will always persist. Sub-allocations that fit in this range will have better fragmentation characteristics, and an overall reduction in memory overhead. This does not have to be a power-of-two.",
+					"DefaultValue": 0,
+					"Key": 1026
+				},
+				{
+					"Name": "SbaSpanSize",
+					"DisplayName": "Sba Span Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The size of each span of memory for the SBA. Each span has a unique size class. Lower values can slightly increase the overhead of initializing SBA allocations, but can reduce overall memory reservation. This must be a power-of-two.",
+					"DefaultValue": 16384,
+					"Key": 1027
+				},
+				{
+					"Name": "SbaMaximumUnusedSpans",
+					"DisplayName": "Sba Maximum Unused Spans",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The maximum number of SBA spans that the system keeps in an unused state, and avoids freeing. Higher values do not increase the peak memory use, but do prevent unused memory from being freed, in order to reduce creation and destruction of SBA spans.",
+					"DefaultValue": 1,
+					"Key": 1028
+				},
+				{
+					"Name": "TlsfInitSize",
+					"DisplayName": "Tlsf Init Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The size of the initial span of memory requested for the main TLSF heap. This span will always persist. (does not have to be a power-of-two).",
+					"DefaultValue": 2097152,
+					"Key": 1029
+				},
+				{
+					"Name": "TlsfSpanSize",
+					"DisplayName": "Tlsf Span Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "When a memory allocation cannot fit in the main TLSF heap, and is a medium-sized allocation, new spans requested will be a multiple of this size (does not have to be a power-of-two).",
+					"DefaultValue": 2097152,
+					"Key": 1030
+				},
+				{
+					"Name": "TlsfLargeSpanSize",
+					"DisplayName": "Tlsf Large Span Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "When a memory allocation cannot fit in the main TLSF heap, and is a large-sized allocation, new spans requested will be a multiple of this size (does not have to be a power-of-two).",
+					"DefaultValue": 8388608,
+					"Key": 1031
+				},
+				{
+					"Name": "TlsfSpanOverhead",
+					"DisplayName": "Tlsf Span Overhead",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The amount of allocation overhead assumed for each span. When new spans for TLSF are requested, this is subtracted from the size of the requested span, after multiplying the requested size up by uPageSize.",
+					"DefaultValue": 128,
+					"Key": 1032
+				},
+				{
+					"Name": "TlsfMaximumUnusedMediumSpans",
+					"DisplayName": "Tlsf Maximum Unused Medium Spans",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The maximum number of Medium spans that the system keeps in an unused state, and avoids freeing. Higher values do not increase the peak memory use, but do prevent unused memory from being freed, in order to reduce creation and destruction of medium spans.",
+					"DefaultValue": 1,
+					"Key": 1033
+				},
+				{
+					"Name": "TlsfMaximumUnusedLargeSpans",
+					"DisplayName": "Tlsf Maximum Unused Large Spans",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The maximum number of Large spans that the system keeps in an unused state, and avoids freeing. Higher values do not increase the peak memory use, but do prevent unused memory from being freed, in order to reduce creation and destruction of large spans.",
+					"DefaultValue": 1,
+					"Key": 1034
+				},
+				{
+					"Name": "AllocSizeLarge",
+					"DisplayName": "Alloc Size Large",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Defines the minimum size for an allocation to qualify as Large. Default to UINT_MAX, so that all large allocs are treated as Medium allocs. Large allocs go into best-fit searches, same as medium allocations, but will go to a separate list of secondary spans, distinct from Medium allocations.",
+					"DefaultValue": 4294967295,
+					"Key": 1035
+				},
+				{
+					"Name": "AllocSizeHuge",
+					"DisplayName": "Alloc Size Huge",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Defines the minimum size for an allocation to qualify as Huge. Huge allocs always go into standalone spans even if there is space available in an existing span.",
+					"DefaultValue": 4194304,
+					"Key": 1036
+				},
+				{
+					"Name": "MemReservedLimit",
+					"DisplayName": "Mem Reserved Limit",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The limit on how much memory will be reserved by this arena. If a request for to reserve more memory is made that would go over this limit, a nullptr is returned. If set to zero, no limit is in place.",
+					"DefaultValue": 0,
+					"Key": 1037
+				}
+			]
+		},
+		{
+			"Name": "MemoryArena_Profiler",
+			"DisplayName": "Memory Arena (Profiler)",
+			"Doc": "Options for the MemoryArena responsible for allocations pertaining to the Wwise Profiler within the Sound Engine. Only active in Debug and Profile configurations.",
+			"KeyStart": 1280,
+			"NumOptions": 14,
+			"Visibility": "Hidden",
+			"Options": [
+				{
+					"Name": "Hooks",
+					"DisplayName": "Hooks",
+					"Visibility": "Hidden",
+					"Type": "Pointer",
+					"Doc": "Function hooks for this MemoryArena. Must be a pointer to an instance of AkMemoryArenaHooks. See documentation for AkMemoryArenaHooks for details.",
+					"DefaultValue": null,
+					"Key": 1280
+				},
+				{
+					"Name": "EnableSba",
+					"DisplayName": "Enable Sba",
+					"Visibility": "Hidden",
+					"Type": "Boolean",
+					"Doc": "Used to determine if the SbaHeap should be initialized and utilized at all. If disabled, all small allocs (size < kAllocSizeMedium) will go into the TlsfHeap and be treated as Medium allocs.",
+					"DefaultValue": true,
+					"Key": 1281
+				},
+				{
+					"Name": "SbaInitSize",
+					"DisplayName": "Sba Init Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The size of the initial allocation of memory for the small block allocator (SBA). This allocation will be made inside the main TLSF heap, and will always persist. Sub-allocations that fit in this range will have better fragmentation characteristics, and an overall reduction in memory overhead. This does not have to be a power-of-two.",
+					"DefaultValue": 0,
+					"Key": 1282
+				},
+				{
+					"Name": "SbaSpanSize",
+					"DisplayName": "Sba Span Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The size of each span of memory for the SBA. Each span has a unique size class. Lower values can slightly increase the overhead of initializing SBA allocations, but can reduce overall memory reservation. This must be a power-of-two.",
+					"DefaultValue": 16384,
+					"Key": 1283
+				},
+				{
+					"Name": "SbaMaximumUnusedSpans",
+					"DisplayName": "Sba Maximum Unused Spans",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The maximum number of SBA spans that the system keeps in an unused state, and avoids freeing. Higher values do not increase the peak memory use, but do prevent unused memory from being freed, in order to reduce creation and destruction of SBA spans.",
+					"DefaultValue": 1,
+					"Key": 1284
+				},
+				{
+					"Name": "TlsfInitSize",
+					"DisplayName": "Tlsf Init Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The size of the initial span of memory requested for the main TLSF heap. This span will always persist. (does not have to be a power-of-two).",
+					"DefaultValue": 2097152,
+					"Key": 1285
+				},
+				{
+					"Name": "TlsfSpanSize",
+					"DisplayName": "Tlsf Span Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "When a memory allocation cannot fit in the main TLSF heap, and is a medium-sized allocation, new spans requested will be a multiple of this size (does not have to be a power-of-two).",
+					"DefaultValue": 2097152,
+					"Key": 1286
+				},
+				{
+					"Name": "TlsfLargeSpanSize",
+					"DisplayName": "Tlsf Large Span Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "When a memory allocation cannot fit in the main TLSF heap, and is a large-sized allocation, new spans requested will be a multiple of this size (does not have to be a power-of-two).",
+					"DefaultValue": 8388608,
+					"Key": 1287
+				},
+				{
+					"Name": "TlsfSpanOverhead",
+					"DisplayName": "Tlsf Span Overhead",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The amount of allocation overhead assumed for each span. When new spans for TLSF are requested, this is subtracted from the size of the requested span, after multiplying the requested size up by uPageSize.",
+					"DefaultValue": 128,
+					"Key": 1288
+				},
+				{
+					"Name": "TlsfMaximumUnusedMediumSpans",
+					"DisplayName": "Tlsf Maximum Unused Medium Spans",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The maximum number of Medium spans that the system keeps in an unused state, and avoids freeing. Higher values do not increase the peak memory use, but do prevent unused memory from being freed, in order to reduce creation and destruction of medium spans.",
+					"DefaultValue": 1,
+					"Key": 1289
+				},
+				{
+					"Name": "TlsfMaximumUnusedLargeSpans",
+					"DisplayName": "Tlsf Maximum Unused Large Spans",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The maximum number of Large spans that the system keeps in an unused state, and avoids freeing. Higher values do not increase the peak memory use, but do prevent unused memory from being freed, in order to reduce creation and destruction of large spans.",
+					"DefaultValue": 1,
+					"Key": 1290
+				},
+				{
+					"Name": "AllocSizeLarge",
+					"DisplayName": "Alloc Size Large",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Defines the minimum size for an allocation to qualify as Large. Default to UINT_MAX, so that all large allocs are treated as Medium allocs. Large allocs go into best-fit searches, same as medium allocations, but will go to a separate list of secondary spans, distinct from Medium allocations.",
+					"DefaultValue": 4294967295,
+					"Key": 1291
+				},
+				{
+					"Name": "AllocSizeHuge",
+					"DisplayName": "Alloc Size Huge",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Defines the minimum size for an allocation to qualify as Huge. Huge allocs always go into standalone spans even if there is space available in an existing span.",
+					"DefaultValue": 4194304,
+					"Key": 1292
+				},
+				{
+					"Name": "MemReservedLimit",
+					"DisplayName": "Mem Reserved Limit",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The limit on how much memory will be reserved by this arena. If a request for to reserve more memory is made that would go over this limit, a nullptr is returned. If set to zero, no limit is in place.",
+					"DefaultValue": 0,
+					"Key": 1293
+				}
+			]
+		},
+		{
+			"Name": "MemoryArena_Device",
+			"DisplayName": "Memory Arena (Device)",
+			"Doc": "Options for the MemoryArena responsible for allocations pertaining to hardware decoding within the Sound Engine. Only active on supported platforms.",
+			"KeyStart": 1536,
+			"NumOptions": 14,
+			"Visibility": "Hidden",
+			"Options": [
+				{
+					"Name": "Hooks",
+					"DisplayName": "Hooks",
+					"Visibility": "Hidden",
+					"Type": "Pointer",
+					"Doc": "Function hooks for this MemoryArena. Must be a pointer to an instance of AkMemoryArenaHooks. See documentation for AkMemoryArenaHooks for details.",
+					"DefaultValue": null,
+					"Key": 1536
+				},
+				{
+					"Name": "EnableSba",
+					"DisplayName": "Enable Sba",
+					"Visibility": "Hidden",
+					"Type": "Boolean",
+					"Doc": "Used to determine if the SbaHeap should be initialized and utilized at all. If disabled, all small allocs (size < kAllocSizeMedium) will go into the TlsfHeap and be treated as Medium allocs.",
+					"DefaultValue": true,
+					"Key": 1537
+				},
+				{
+					"Name": "SbaInitSize",
+					"DisplayName": "Sba Init Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The size of the initial allocation of memory for the small block allocator (SBA). This allocation will be made inside the main TLSF heap, and will always persist. Sub-allocations that fit in this range will have better fragmentation characteristics, and an overall reduction in memory overhead. This does not have to be a power-of-two.",
+					"DefaultValue": 0,
+					"Key": 1538
+				},
+				{
+					"Name": "SbaSpanSize",
+					"DisplayName": "Sba Span Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The size of each span of memory for the SBA. Each span has a unique size class. Lower values can slightly increase the overhead of initializing SBA allocations, but can reduce overall memory reservation. This must be a power-of-two.",
+					"DefaultValue": 16384,
+					"Key": 1539
+				},
+				{
+					"Name": "SbaMaximumUnusedSpans",
+					"DisplayName": "Sba Maximum Unused Spans",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The maximum number of SBA spans that the system keeps in an unused state, and avoids freeing. Higher values do not increase the peak memory use, but do prevent unused memory from being freed, in order to reduce creation and destruction of SBA spans.",
+					"DefaultValue": 1,
+					"Key": 1540
+				},
+				{
+					"Name": "TlsfInitSize",
+					"DisplayName": "Tlsf Init Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The size of the initial span of memory requested for the main TLSF heap. This span will always persist. (does not have to be a power-of-two).",
+					"DefaultValue": 2097152,
+					"Key": 1541
+				},
+				{
+					"Name": "TlsfSpanSize",
+					"DisplayName": "Tlsf Span Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "When a memory allocation cannot fit in the main TLSF heap, and is a medium-sized allocation, new spans requested will be a multiple of this size (does not have to be a power-of-two).",
+					"DefaultValue": 2097152,
+					"Key": 1542
+				},
+				{
+					"Name": "TlsfLargeSpanSize",
+					"DisplayName": "Tlsf Large Span Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "When a memory allocation cannot fit in the main TLSF heap, and is a large-sized allocation, new spans requested will be a multiple of this size (does not have to be a power-of-two).",
+					"DefaultValue": 8388608,
+					"Key": 1543
+				},
+				{
+					"Name": "TlsfSpanOverhead",
+					"DisplayName": "Tlsf Span Overhead",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The amount of allocation overhead assumed for each span. When new spans for TLSF are requested, this is subtracted from the size of the requested span, after multiplying the requested size up by uPageSize.",
+					"DefaultValue": 128,
+					"Key": 1544
+				},
+				{
+					"Name": "TlsfMaximumUnusedMediumSpans",
+					"DisplayName": "Tlsf Maximum Unused Medium Spans",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The maximum number of Medium spans that the system keeps in an unused state, and avoids freeing. Higher values do not increase the peak memory use, but do prevent unused memory from being freed, in order to reduce creation and destruction of medium spans.",
+					"DefaultValue": 1,
+					"Key": 1545
+				},
+				{
+					"Name": "TlsfMaximumUnusedLargeSpans",
+					"DisplayName": "Tlsf Maximum Unused Large Spans",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The maximum number of Large spans that the system keeps in an unused state, and avoids freeing. Higher values do not increase the peak memory use, but do prevent unused memory from being freed, in order to reduce creation and destruction of large spans.",
+					"DefaultValue": 1,
+					"Key": 1546
+				},
+				{
+					"Name": "AllocSizeLarge",
+					"DisplayName": "Alloc Size Large",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Defines the minimum size for an allocation to qualify as Large. Default to UINT_MAX, so that all large allocs are treated as Medium allocs. Large allocs go into best-fit searches, same as medium allocations, but will go to a separate list of secondary spans, distinct from Medium allocations.",
+					"DefaultValue": 4294967295,
+					"Key": 1547
+				},
+				{
+					"Name": "AllocSizeHuge",
+					"DisplayName": "Alloc Size Huge",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Defines the minimum size for an allocation to qualify as Huge. Huge allocs always go into standalone spans even if there is space available in an existing span.",
+					"DefaultValue": 4194304,
+					"Key": 1548
+				},
+				{
+					"Name": "MemReservedLimit",
+					"DisplayName": "Mem Reserved Limit",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The limit on how much memory will be reserved by this arena. If a request for to reserve more memory is made that would go over this limit, a nullptr is returned. If set to zero, no limit is in place.",
+					"DefaultValue": 0,
+					"Key": 1549
+				}
+			]
+		},
+		{
+			"Name": "StreamMgr",
+			"DisplayName": "Stream Manager",
+			"Doc": "Options that affect file I/O behavior.",
+			"KeyStart": 1792,
+			"NumOptions": 14,
+			"Visibility": "Default",
+			"Options": [
+				{
+					"Name": "LowLevelIOHook",
+					"DisplayName": "Low Level I/O Hook",
+					"Visibility": "Hidden",
+					"Type": "Pointer",
+					"Doc": "Low-level I/O implementation for primary streaming device. Must point to an instance of AK::StreamMgr::IAkLowLevelIOHook.",
+					"DefaultValue": null,
+					"Key": 1792
+				},
+				{
+					"Name": "IOMemory",
+					"DisplayName": "IO Memory",
+					"Visibility": "Hidden",
+					"Type": "Pointer",
+					"Doc": "Pointer for I/O memory allocated by user.\nSet this if you don't want memory to be allocated via AK::MemoryMgr::Malign().\nWhen set, PoolAttributes are ignored.",
+					"DefaultValue": null,
+					"Key": 1793
+				},
+				{
+					"Name": "IOMemorySize",
+					"DisplayName": "IO Memory Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Size of memory for I/O (for automatic streams). It is passed directly to AK::MemoryMgr::Malign(), after having been rounded down to a multiple of Granularity.",
+					"DefaultValue": 2097152,
+					"Key": 1794
+				},
+				{
+					"Name": "IOMemoryAlignment",
+					"DisplayName": "IO Memory Alignment",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "I/O memory alignment. It is passed directly to AK::MemoryMgr::Malign(). When set to -1, Wwise will automatically select a suitable alignment value for the current platform.",
+					"DefaultValue": -1,
+					"Key": 1795
+				},
+				{
+					"Name": "MemAllocType",
+					"DisplayName": "Mem Alloc Type",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Attributes for I/O memory. Here, specify the allocation type (AkMemType_Device, and so on). It is passed directly to AK::MemoryMgr::Malign().",
+					"DefaultValue": 0,
+					"Key": 1796
+				},
+				{
+					"Name": "Granularity",
+					"DisplayName": "Granularity",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "I/O requests granularity (typical bytes/request).",
+					"DefaultValue": 16384,
+					"Key": 1797
+				},
+				{
+					"Name": "AutoStreamTargetBufferLength",
+					"DisplayName": "Auto Stream Target Buffer Length",
+					"Visibility": "Advanced",
+					"Type": "Real",
+					"Doc": "Targeted automatic stream buffer length (ms). When a stream reaches that buffering, it stops being scheduled for I/O except if the scheduler is idle.",
+					"DefaultValue": 380,
+					"Key": 1798
+				},
+				{
+					"Name": "MaxLatencyMs",
+					"DisplayName": "Max Latency Ms",
+					"Visibility": "Advanced",
+					"Type": "Integer",
+					"Doc": "Maximum streaming latency (in ms). Used to warm up media streams in advance of playback in latency-sensitive scenarios, such as music playback.",
+					"DefaultValue": 100,
+					"Key": 1799
+				},
+				{
+					"Name": "LookAheadRatio",
+					"DisplayName": "Lookahead Ratio",
+					"Visibility": "Advanced",
+					"Type": "Real",
+					"Doc": "Multiplication factor for all streaming look-ahead heuristic values, for music streams.",
+					"DefaultValue": 1.0,
+					"Key": 1800
+				},
+				{
+					"Name": "MaxConcurrentIO",
+					"DisplayName": "Max Concurrent I/O Requests",
+					"Visibility": "Advanced",
+					"Type": "Integer",
+					"Doc": "Maximum number of transfers that can be sent simultaneously to the Low-Level I/O.",
+					"DefaultValue": 8,
+					"Key": 1801
+				},
+				{
+					"Name": "UseStreamCache",
+					"DisplayName": "Use Stream Cache",
+					"Visibility": "Advanced",
+					"Type": "Boolean",
+					"Doc": "If true, the device attempts to reuse I/O buffers that have already been streamed from disk. This is particularly useful when streaming small looping sounds. However, there is a small increase in CPU usage when allocating memory, and a slightly larger memory footprint in the StreamManager pool.",
+					"DefaultValue": false,
+					"Key": 1802
+				},
+				{
+					"Name": "MaxPinnedCacheSize",
+					"DisplayName": "Max Pinned Cache Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Maximum number of bytes that can be pinned using AK::SoundEngine::PinEventInStreamCache() or AK::IAkStreamMgr::PinFileInCache(). When set to -1, the cache size is unlimited.",
+					"DefaultValue": -1,
+					"Key": 1803
+				},
+				{
+					"Name": "EnablePackageFallback",
+					"DisplayName": "Enable Package Fallback",
+					"Visibility": "Default",
+					"Type": "Boolean",
+					"Doc": "Determines what happens when a file is not found in a package.\n\nWhen true, the default low-level I/O implementation will fall back on searching the base path locations using the platform's native filesystem API.\n\nWhen false, files will be searched in packages exclusively, with no fallback on base path locations.\n\nThis policy can be changed at runtime by calling AK::StreamMgr::SetPackageFallbackBehavior.",
+					"DefaultValue": true,
+					"Key": 1804
+				},
+				{
+					"Name": "UseSubfoldering",
+					"DisplayName": "Use Subfoldering",
+					"Visibility": "Default",
+					"Type": "Boolean",
+					"Doc": "Change the sub-foldering policy of the Low-Level I/O hook for searching files.\nThis setting should match the 'Create Sub-Folders for Generated Files' of the Wwise Project Settings.",
+					"DefaultValue": false,
+					"Key": 1805
+				}
+			]
+		},
+		{
+			"Name": "SoundEngine",
+			"DisplayName": "Sound Engine",
+			"Doc": "Options that affect general Sound Engine behavior.",
+			"KeyStart": 2048,
+			"NumOptions": 6,
+			"Visibility": "Default",
+			"Options": [
+				{
+					"Name": "Hooks",
+					"DisplayName": "Hooks",
+					"Visibility": "Hidden",
+					"Type": "Pointer",
+					"Doc": "Function hooks for the Sound Engine. Must be a pointer to an instance of AkSoundEngineHooks. See documentation for AkSoundEngineHooks for details.",
+					"DefaultValue": null,
+					"Key": 2048
+				},
+				{
+					"Name": "PluginPath",
+					"DisplayName": "Plugin Path",
+					"Visibility": "Hidden",
+					"Type": "String",
+					"MaxLength": 255,
+					"Doc": "When using DLLs for plugins, specify their path. Leave unspecified if DLLs are in the same folder as the game executable. Maximum 255 characters.",
+					"DefaultValue": null,
+					"Key": 2049
+				},
+				{
+					"Name": "MaxNumPaths",
+					"DisplayName": "Max Num Paths",
+					"Visibility": "Default",
+					"Type": "Integer",
+					"Doc": "Maximum number of paths for positioning.",
+					"DefaultValue": 255,
+					"Key": 2050
+				},
+				{
+					"Name": "ContinuousPlaybackLookAheadMS",
+					"DisplayName": "Continuous Playback Lookahead (MS)",
+					"Visibility": "Default",
+					"Type": "Real",
+					"Doc": "Number of milliseconds ahead when continuous containers should instantiate a new voice before which next sounds should start playing.\n\nThis lookahead time allows I/O to occur, and is especially useful to reduce the latency of continuous containers with trigger rate or sample-accurate transitions. You should set this value slightly above the required time for an asynchronous I/O stream to return the first buffers of file data.\n\nThis value is rounded up to audio frame granularity. An audio frame duration is equal to NumSamplesPerFrame / SampleRate. For example, given an audio frame duration of 10.6ms (the default on most platforms), a ContinuousPlaybackLookAheadMS value of 40.0 will be rounded up to exactly 4 audio frames, or ~42.4ms.",
+					"DefaultValue": 40.0,
+					"Key": 2051
+				},
+				{
+					"Name": "FloorPlane",
+					"DisplayName": "Floor Plane",
+					"Visibility": "Default",
+					"Type": "Integer",
+					"Doc": "Define the orientation of the the floor plane with respect to the X,Y,Z axes, and which axes represent the side, front and up vectors as a basis for rotations in Wwise.\nAkFloorPlane is used in to orient the Game Object 3D Viewer in Wwise, and in the transformation of geometry instances in Wwise Acoustics.",
+					"AllowedValues": [
+						{
+							"Value": 0,
+							"DisplayName": "XZ",
+							"Doc": "The floor is oriented along the ZX-plane. The front vector points towards +Z, the up vector towards +Y, and the side vector towards +X."
+						},
+						{
+							"Value": 1,
+							"DisplayName": "XY",
+							"Doc": "The floor is oriented along the XY-plane. The front vector points towards +X, the up vector towards +Z, and the side vector towards +Y."
+						},
+						{
+							"Value": 2,
+							"DisplayName": "YZ",
+							"Doc": "The floor is oriented along the YZ-plane. The front vector points towards +Y, the up vector towards +X, and the side vector towards +Z."
+						}
+					],
+					"DefaultValue": 0,
+					"Key": 2052
+				},
+				{
+					"Name": "GameUnitsPerMeters",
+					"DisplayName": "Game Units Per Meters",
+					"Visibility": "Default",
+					"Type": "Real",
+					"Doc": "The number of game units in a meter.\n\nThis setting is used to adapt the size of elements in the Authoring's Game Object 3D Viewer and Audio Object 3D Viewer to meters.\nThis setting is also used to simulate real-world positioning of System Audio Objects, to improve the HRTF in some cases.\nFor example, if your game engine sends positions in centimeters, the value of GameUnitsPerMeters should be 100.",
+					"DefaultValue": 1.0,
+					"Key": 2053
+				}
+			]
+		},
+		{
+			"Name": "AudioMgr",
+			"DisplayName": "Audio Manager",
+			"Doc": "Options to control audio processing.",
+			"KeyStart": 2304,
+			"NumOptions": 10,
+			"Visibility": "Default",
+			"Options": [
+				{
+					"Name": "EnableThread",
+					"DisplayName": "Enable Thread",
+					"Visibility": "Hidden",
+					"Type": "Boolean",
+					"Doc": "Use a Wwise-owned thread for processing audio. If set to false, audio processing will occur only inside a call to AK::SoundEngine::RenderAudio().",
+					"DefaultValue": true,
+					"Key": 2304
+				},
+				{
+					"Name": "NumSamplesPerFrame",
+					"DisplayName": "Num Samples Per Frame",
+					"Visibility": "Default",
+					"Type": "Integer",
+					"Doc": "Number of samples per audio frame. Should be a power of two like 256, 512, 1024, etc.",
+					"DefaultValue": 512,
+					"Key": 2305
+				},
+				{
+					"Name": "SampleRate",
+					"DisplayName": "Sample Rate",
+					"Visibility": "Default",
+					"Type": "Integer",
+					"Doc": "Sample rate of the audio pipeline.\n\nA value of 0 will select the native sample rate of the system. Once selected, the sample rate cannot change without re-initializing the Sound Engine.",
+					"DefaultValue": 0,
+					"Key": 2306
+				},
+				{
+					"Name": "MultipleBuffering",
+					"DisplayName": "Multiple Buffering",
+					"Visibility": "Default",
+					"MinValue": 2,
+					"Type": "Integer",
+					"Doc": "Number of audio buffers to produce before waiting for the hardware to consume them. 2 == double-buffered, defaults to 4.",
+					"DefaultValue": 4,
+					"Key": 2307
+				},
+				{
+					"Name": "CommandQueueSize",
+					"DisplayName": "Command Queue Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Size of the command queue, in bytes.",
+					"DefaultValue": 262144,
+					"Key": 2308
+				},
+				{
+					"Name": "DebugOutOfRangeLimit",
+					"DisplayName": "Debug Out-Of-Range Limit",
+					"Visibility": "Advanced",
+					"Type": "Real",
+					"Doc": "Debug setting: Only used when EnableDebugOutOfRangeCheck is true. This defines the maximum values samples can have. Normal audio must be contained within +1/-1. This limit should be set higher to allow temporary or short excursions out of range.",
+					"DefaultValue": 16,
+					"Key": 2309
+				},
+				{
+					"Name": "EnableDebugOutOfRangeCheck",
+					"DisplayName": "Enable Debug Out-Of-Range Check",
+					"Visibility": "Advanced",
+					"Type": "Boolean",
+					"Doc": "Debug setting: Enable checks for out-of-range (and NAN) floats in the processing code. This incurs a small performance hit, but can be enabled in most scenarios. Will print error messages in the log if invalid values are found at various point in the pipeline. Contact AK Support with the new error messages for more information.",
+					"DefaultValue": false,
+					"Key": 2310
+				},
+				{
+					"Name": "EnableOfflineRendering",
+					"DisplayName": "Enable Offline Rendering",
+					"Visibility": "Hidden",
+					"Type": "Boolean",
+					"Doc": "When true, the Wwise processing pipeline is disconnected from actual audio output hardware. Instead, every call to AK::SoundEngine::RenderAudio processes exactly one buffer of audio. This audio can be captured to a file using AK::SoundEngine::StartOutputCapture.",
+					"DefaultValue": false,
+					"Key": 2311
+				},
+				{
+					"Name": "MaxHardwareTimeoutMs",
+					"DisplayName": "Max Hardware Timeout (MS)",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Amount of milliseconds to wait for HW devices to trigger an audio interrupt. If there is no interrupt after that time, the sound engine will revert to silent mode and continue operating until the HW finally comes back.",
+					"DefaultValue": 1000,
+					"Key": 2312
+				},
+				{
+					"Name": "EnableHwCodecLowLatencyMode",
+					"DisplayName": "Enable HwCodec Low Latency Mode",
+					"Visibility": "Advanced",
+					"Type": "Boolean",
+					"Doc": "Use low latency mode for hardware-accelerated codecs. \n\nIf true, decoding jobs are submitted at the beginning of the Wwise update and audio processing blocks until the decoding jobs are complete. This eliminates the latency caused by hardware decoding but can lead to audio device starvation when too many hardware-accelerated voices are playing concurrently.",
+					"DefaultValue": false,
+					"Key": 2313
+				}
+			]
+		},
+		{
+			"Name": "BankMgr",
+			"DisplayName": "Bank Manager",
+			"Doc": "Options to control the behavior for loading bank and media files.",
+			"KeyStart": 2560,
+			"NumOptions": 3,
+			"Visibility": "Hidden",
+			"Options": [
+				{
+					"Name": "EnableThread",
+					"DisplayName": "Enable Thread",
+					"Visibility": "Hidden",
+					"Type": "Boolean",
+					"Doc": "Use a Wwise-owned thread for loading sound banks. If set to false, bank-loading will occur only inside a call to AK::SoundEngine::ProcessBanks().",
+					"DefaultValue": true,
+					"Key": 2560
+				},
+				{
+					"Name": "EnableManualGameSyncPreparation",
+					"DisplayName": "Enable Manual Game Sync Preparation",
+					"Visibility": "Hidden",
+					"Type": "Boolean",
+					"Doc": "When true, AK::SoundEngine::PrepareGameSync must be called manually to prepare game syncs.",
+					"DefaultValue": false,
+					"Key": 2561
+				},
+				{
+					"Name": "BankReadBufferSize",
+					"DisplayName": "Bank Read Buffer Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "The number of bytes read by the BankReader when new data needs to be loaded from disk during serialization. Increasing this trades memory usage for larger, but fewer, file-read events during bank loading.",
+					"DefaultValue": 32768,
+					"Key": 2562
+				}
+			]
+		},
+		{
+			"Name": "Output",
+			"DisplayName": "Output",
+			"Doc": "Options that configure the behavior of the primary audio output device.",
+			"KeyStart": 2816,
+			"NumOptions": 7,
+			"Visibility": "Default",
+			"Options": [
+				{
+					"Name": "AudioDeviceShareset",
+					"DisplayName": "Audio Device Shareset",
+					"Visibility": "Advanced",
+					"Type": "Integer",
+					"Doc": "Unique ID of a custom audio device to be used. Custom audio devices are defined in the Audio Device Shareset section of the Wwise project.\nIf you want to output normally through the output device defined on the Master Bus in your project, leave this field to its default value (AK_INVALID_UNIQUE_ID, or value 0).\nOtherwise, you can use AK::SoundEngine::GetIDFromString to generate the ID from the name of the shareset in the Wwise Project.",
+					"DefaultValue": 0,
+					"Key": 2816
+				},
+				{
+					"Name": "DeviceID",
+					"DisplayName": "DeviceID",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Device-specific identifier, when multiple devices of the same type are possible. When 0, Wwise chooses the default output device for the output type.",
+					"DefaultValue": 0,
+					"Key": 2817
+				},
+				{
+					"Name": "PanningRule",
+					"DisplayName": "Panning Rule",
+					"Visibility": "Default",
+					"Type": "Integer",
+					"Doc": "Rule for 3D panning of signals routed to a stereo bus.",
+					"AllowedValues": [
+						{
+							"Value": 0,
+							"DisplayName": "Speakers",
+							"Doc": "Left and right positioned 60 degrees apart by default (by default - see AK::SoundEngine::GetSpeakerAngles())"
+						},
+						{
+							"Value": 1,
+							"DisplayName": "Headphones",
+							"Doc": "Left and right positioned 180 degrees apart."
+						}
+					],
+					"DefaultValue": 0,
+					"Key": 2818
+				},
+				{
+					"Name": "EnableAutoPanningRule",
+					"DisplayName": "Enable Auto Panning Rule",
+					"Visibility": "Default",
+					"Type": "Boolean",
+					"Doc": "Let Wwise choose the appropriate panning rule based on audio output device.\n\nWhen headphones are detected at the output, \"Headphones\" is selected. Otherwise, \"Speakers\" is selected. Set this to false to opt out of this feature.\n\nNote that not all platforms support headphone detection.",
+					"DefaultValue": false,
+					"Key": 2819
+				},
+				{
+					"Name": "ChannelConfig",
+					"DisplayName": "Channel Config",
+					"Visibility": "Default",
+					"Type": "ChannelConfig",
+					"Doc": "Channel configuration for this output. \n\nMust be the serialized value of an AkChannelConfig object. Call AkChannelConfig::Serialize on a valid AkChannelConfig instance to obtain this value.\n\nLeave at 0 to let Wwise choose the appropriate channel configuration for the hardware.\n\nNote that not all hardware support all configurations.",
+					"DefaultValue": 0,
+					"Key": 2820
+				},
+				{
+					"Name": "MaxSystemAudioObjects",
+					"DisplayName": "Max System Audio Objects",
+					"Visibility": "Default",
+					"MinValue": 0,
+					"Type": "Integer",
+					"Doc": "Maximum number of System Audio Objects allowed for 3D Audio output.\n\nThis only applies to platforms that support 3D Audio. Dictates the maximum number of system resources to pre-allocate for System Audio Objects.\n\nSet to 0 to disable the use of System Audio Objects.",
+					"DefaultValue": 128,
+					"Key": 2821
+				},
+				{
+					"Name": "EnableVerboseSystemLog",
+					"DisplayName": "Enable Verbose System Log",
+					"Visibility": "Default",
+					"Type": "Boolean",
+					"Doc": "Print additional information about platform-specific audio output configuration to the system log.\n\nCan be useful for debugging audio issues with specific hardware. Not all platforms support this option.",
+					"DefaultValue": false,
+					"Key": 2822
+				}
+			]
+		},
+		{
+			"Name": "JobMgr",
+			"DisplayName": "Job Manager",
+			"Doc": "Options to configure the Job Manager submodule for multicore processing of the Sound Engine.",
+			"KeyStart": 3072,
+			"NumOptions": 10,
+			"Visibility": "Hidden",
+			"Options": [
+				{
+					"Name": "MaxActiveWorkers_Generic",
+					"DisplayName": "Max Active Workers (Generic)",
+					"Visibility": "Hidden",
+					"MinValue": 1,
+					"Type": "Integer",
+					"Doc": "The maximum number of concurrent workers that will be requested for general-purpose jobs. Must be >= 1.",
+					"DefaultValue": 1,
+					"Key": 3072
+				},
+				{
+					"Name": "MaxActiveWorkers_AudioProcessing",
+					"DisplayName": "Max Active Workers (Audio Processing)",
+					"Visibility": "Hidden",
+					"MinValue": 1,
+					"Type": "Integer",
+					"Doc": "The maximum number of concurrent workers that will be requested for jobs that process audio. Must be >= 1.",
+					"DefaultValue": 1,
+					"Key": 3073
+				},
+				{
+					"Name": "MaxActiveWorkers_Acoustics",
+					"DisplayName": "Max Active Workers (Acoustics)",
+					"Visibility": "Hidden",
+					"MinValue": 1,
+					"Type": "Integer",
+					"Doc": "The maximum number of concurrent workers that will be requested for jobs that process Wwise Acoustics simulation. Must be >= 1.",
+					"DefaultValue": 1,
+					"Key": 3074
+				},
+				{
+					"Name": "NumMemorySlabs",
+					"DisplayName": "Num Memory Slabs",
+					"Visibility": "Hidden",
+					"MinValue": 1,
+					"Type": "Integer",
+					"Doc": "Number of memory slabs to pre-allocate for job manager memory. At least one slab per worker thread should be pre-allocated.",
+					"DefaultValue": 1,
+					"Key": 3075
+				},
+				{
+					"Name": "MemorySlabSize",
+					"DisplayName": "Memory Slab Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Size in bytes of each memory slab used for job manager memory. Must be a power of two.",
+					"DefaultValue": 4096,
+					"Key": 3076
+				},
+				{
+					"Name": "EnableWorkerThreads",
+					"DisplayName": "Enable Worker Threads",
+					"Visibility": "Hidden",
+					"Type": "Boolean",
+					"Doc": "Let the Sound Engine manage a thread pool for each job type.\n\nWhen this is enabled, the Sound Engine creates and manages a number of threads for each job type and automatically dispatches jobs to these threads. Enable this option if you want to take advantage of parallel processing in Wwise without the need to provide a custom implementation via AkSoundEngineHooks::pfRequestJobWorker. \n\nThe number of threads created for each job type is dictated by the `NumWorkerThreads` runtime option.",
+					"DefaultValue": false,
+					"Key": 3077
+				},
+				{
+					"Name": "NumWorkerThreads",
+					"DisplayName": "Num Worker Threads",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Size of the worker thread pool.",
+					"DefaultValue": 4,
+					"Key": 3078
+				},
+				{
+					"Name": "WorkerThreadExecutionTime",
+					"DisplayName": "Worker Thread Execution Time",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Maximum amount of time allotted for one execution of a worker, in microseconds.\n\nPast this deadline, the worker stops consuming new jobs and the worker thread goes back to sleep.\n\nA value of 0 means there is no limit, and the thread will keep working until there are no more jobs for it to work on.\n\nThis runtime option only applies to threads managed by the Sound Engine (see EnableWorkerThreads option).",
+					"DefaultValue": 0,
+					"Key": 3079
+				},
+				{
+					"Name": "WorkerThreadProperties",
+					"DisplayName": "Worker Thread Properties",
+					"Visibility": "Hidden",
+					"Type": "Pointer",
+					"Doc": "Pointer to an array of AkThreadProperties objects. The number of objects in the array must be equal to `NumWorkerThreads`.\n\nWhen this option is set, the `JobWorker` options in AkOption_Threads are ignored.",
+					"DefaultValue": null,
+					"Key": 3080
+				},
+				{
+					"Name": "HangDetectionTimeoutMs",
+					"DisplayName": "Hang Detection Timeout Ms",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "How long the Job Manager waits before it reports a hang in job execution, measured in milliseconds. If set to 0, no detection of hangs is performed.",
+					"DefaultValue": 0,
+					"Key": 3081
+				}
+			]
+		},
+		{
+			"Name": "Acoustics",
+			"DisplayName": "Acoustics",
+			"Doc": "Options to configure the Wwise Acoustics submodule for realistic acoustic simulation.",
+			"KeyStart": 3328,
+			"NumOptions": 26,
+			"Visibility": "Default",
+			"Options": [
+				{
+					"Name": "Enable",
+					"DisplayName": "Enable",
+					"Visibility": "Default",
+					"Type": "Boolean",
+					"Doc": "Enable Wwise Acoustics feature.\n\nWhen this is set to true, Wwise Acoustics is initialized as part of Sound Engine initialization.",
+					"DefaultValue": false,
+					"Key": 3328
+				},
+				{
+					"Name": "MaxSoundPropagationDepth",
+					"DisplayName": "Max Sound Propagation Depth",
+					"Visibility": "Default",
+					"MinValue": 0,
+					"MaxValue": 8,
+					"Type": "Integer",
+					"Doc": "Maximum number of rooms that sound can propagate through.\n\nMust be less than or equal to the default value (8). Values below 2 will not propagate sound past the listener's own room.",
+					"DefaultValue": 8,
+					"Key": 3329
+				},
+				{
+					"Name": "MovementThreshold",
+					"DisplayName": "Movement Threshold",
+					"Visibility": "Default",
+					"MinValue": 0,
+					"Type": "Real",
+					"Doc": "Amount that an emitter or listener has to move to trigger a validation of reflections/diffraction. \n\nLarger values can reduce the CPU load at the cost of reduced accuracy. Note that the ray tracing itself is not affected by this value. Rays are cast each time a Wwise Acoustics update is executed.",
+					"DefaultValue": 0.25,
+					"Key": 3330
+				},
+				{
+					"Name": "NumberOfPrimaryRays",
+					"DisplayName": "Number Of Primary Rays",
+					"Visibility": "Default",
+					"MinValue": 0,
+					"Type": "Integer",
+					"Doc": "The number of primary rays used in the ray tracing engine.\n\nA larger number of rays will increase the chances of finding reflection and diffraction paths, but will result in higher CPU usage.",
+					"DefaultValue": 35,
+					"Key": 3331
+				},
+				{
+					"Name": "MaxReflectionOrder",
+					"DisplayName": "Max Reflection Order",
+					"Visibility": "Default",
+					"MinValue": 1,
+					"MaxValue": 4,
+					"Type": "Integer",
+					"Doc": "The number of bounces in a reflection path.\n\nMust be in the range [1, 4]. A high reflection order renders more details at the expense of higher CPU usage.",
+					"DefaultValue": 2,
+					"Key": 3332
+				},
+				{
+					"Name": "MaxDiffractionOrder",
+					"DisplayName": "Max Diffraction Order",
+					"Visibility": "Default",
+					"MinValue": 1,
+					"MaxValue": 8,
+					"Type": "Integer",
+					"Doc": "The number of bends in a diffraction path.\n\nMust be in the range [1, 8]. A high diffraction order accommodates more complex geometry at the expense of higher CPU usage.\nDiffraction must be enabled on the geometry to find diffraction paths (see AkGeometryParams). Set to 0 to disable diffraction on all geometry.\nThis parameter limits the recursion depth of diffraction rays cast from the listener to scan the environment, and also the depth of the diffraction search to find paths between emitter and listener.\nTo optimize CPU usage, set it to the maximum number of edges you expect the obstructing geometry to traverse. \nFor example, if box-shaped geometry is used exclusively, and only a single box is expected between an emitter and then listener, limiting MaxDiffractionOrder to 2 may be sufficient.\nA diffraction path search starts from the listener, so when the maximum diffraction order is exceeded, the remaining geometry between the end of the path and the emitter is ignored.\nIn such case, where the search is terminated before reaching the emitter, the diffraction coefficient will be underestimated. It is calculated from a partial path, ignoring any remaining geometry.",
+					"DefaultValue": 4,
+					"Key": 3333
+				},
+				{
+					"Name": "MaxDiffractionPaths",
+					"DisplayName": "Max Diffraction Paths",
+					"Visibility": "Default",
+					"MinValue": 0,
+					"Type": "Integer",
+					"Doc": "Limit the maximum number of diffraction paths computed per emitter, excluding the direct/transmission path.\n\nThe acoustics engine searches for up to MaxDiffractionPaths paths and stops searching when this limit is reached.\nSetting a low number for MaxDiffractionPaths (1-4) uses fewer CPU resources, but is more likely to cause discontinuities in the resulting audio. This can occur, for example, when a more prominent path is discovered, displacing a less prominent one.\nConversely, a larger number (8 or more) produces higher quality output but requires more CPU resources. The recommended range is 2-8.",
+					"DefaultValue": 8,
+					"Key": 3334
+				},
+				{
+					"Name": "MaxGlobalReflectionPaths",
+					"DisplayName": "Max Global Reflection Paths",
+					"Visibility": "Default",
+					"MinValue": 1,
+					"Type": "Integer",
+					"Doc": "Global reflection path limit among all sound emitters with early reflections enabled.\n\nPotential reflection paths, discovered by raycasting, are first sorted according to a heuristic to determine which paths are the most prominent. \nAfterwards, the full reflection path calculation is performed on only the MaxGlobalReflectionPaths, most prominent paths. Limiting the total number of reflection path calculations can significantly reduce CPU usage. Recommended range: 10-50. Range: [1, infinity[.",
+					"DefaultValue": 50,
+					"Key": 3335
+				},
+				{
+					"Name": "MaxEmitterRoomAuxSends",
+					"DisplayName": "Max Emitter Room Aux Sends",
+					"Visibility": "Default",
+					"MinValue": 0,
+					"Type": "Integer",
+					"Doc": "The maximum number of game-defined auxiliary sends that can originate from a single emitter.\n\nAn emitter can send to its own room, and to all adjacent rooms if the emitter and listener are in the same room. If a limit is set, the most prominent sends are kept, based on spread to the adjacent portal from the emitters perspective.\nSet to 1 to only allow emitters to send directly to their current room, and to the room a listener is transitioning to if inside a portal. Set to 0 to disable the limit.",
+					"DefaultValue": 3,
+					"Key": 3336
+				},
+				{
+					"Name": "DiffractionOnReflectionsOrder",
+					"DisplayName": "Diffraction On Reflections Order",
+					"Visibility": "Default",
+					"MinValue": 0,
+					"Type": "Integer",
+					"Doc": "The maximum possible number of diffraction points at each end of a reflection path.\n\nDiffraction on reflection allows reflections to fade in and out smoothly as the listener or emitter moves in and out of the reflection's shadow zone.\nWhen greater than zero, diffraction rays are sent from the listener to search for reflections around one or more corners from the listener.\nDiffraction must be enabled on the geometry to find diffracted reflections (see AkGeometryParams). Set to 0 to disable diffraction on reflections.\nTo allow reflections to propagate through portals without being cut off, set DiffractionOnReflectionsOrder to 2 or greater.",
+					"DefaultValue": 2,
+					"Key": 3337
+				},
+				{
+					"Name": "MaxDiffractionAngleDegrees",
+					"DisplayName": "Max Diffraction Angle Degrees",
+					"Visibility": "Default",
+					"MinValue": 0,
+					"MaxValue": 360,
+					"Type": "Real",
+					"Doc": "The largest possible diffraction value, in degrees, beyond which paths are not computed and are inaudible. \n\nMust be greater than zero.\nA large value (for example, 360 degrees) allows paths to propagate further around corners and obstacles, but takes more CPU time to compute.\nA gain is applied to each diffraction path to taper the volume of the path to zero as the diffraction angle approaches fMaxDiffractionAngleDegrees,\nand appears in the Voice Inspector as 'Diffraction Tapering'. This tapering gain is applied in addition to the diffraction curves, and prevents paths from popping in or out suddenly when the maximum diffraction angle is exceeded.\nIn Wwise Authoring, the horizontal axis of a diffraction curve in the attenuation editor is defined over the range 0-100%, corresponding to angles 0-180 degrees.\nIf MaxDiffractionAngleDegrees is greater than 180 degrees, diffraction coefficients over 100% are clamped and the curve is evaluated at the rightmost point.",
+					"DefaultValue": 180,
+					"Key": 3338
+				},
+				{
+					"Name": "MaxPathLength",
+					"DisplayName": "Max Path Length",
+					"Visibility": "Default",
+					"MinValue": 0,
+					"Type": "Real",
+					"Doc": "Upper limit of the total length of a path composed of a sequence of segments (or rays).\n\nHigh values compute longer paths but increase the CPU cost.\nEach individual sound is also affected by its maximum attenuation distance, specified in the Authoring tool. Reflection or diffraction paths, calculated inside Wwise Acoustics, will never exceed a sound's maximum attenuation distance.\nNote, however, that attenuation is considered infinite if the furthest point is above the audibility threshold.",
+					"DefaultValue": 1000,
+					"Key": 3339
+				},
+				{
+					"Name": "CPULimitPercentage",
+					"DisplayName": "CPU Limit Percentage",
+					"Visibility": "Default",
+					"MinValue": 0,
+					"MaxValue": 100,
+					"Type": "Real",
+					"Doc": "Defines the targeted max computation time allocated for Wwise Acoustics.\n\nDefined as a percentage [0, 100] of the current audio frame. When the value is different from 0, Wwise Acoustics adapts dynamically the load balancing spread value between 1 and the specified LoadBalancingSpread according to current CPU usage and the specified CPU limit. Set to 0 to disable the dynamic load balancing spread computation.",
+					"DefaultValue": 0,
+					"Key": 3340
+				},
+				{
+					"Name": "LoadBalancingSpread",
+					"DisplayName": "Load Balancing Spread",
+					"Visibility": "Default",
+					"MinValue": 1,
+					"Type": "Integer",
+					"Doc": "Spread the computation of paths on uLoadBalancingSpread frames [1..[.\n\nWhen LoadBalancingSpread is set to 1, no load balancing is done. Values greater than 1 indicate the computation of paths will be spread on this number of frames. When CPU limit is active (see CPULimitPercentage), this setting represents the upper bound spread used by the dynamic load balancing instead of a fixed value.",
+					"DefaultValue": 1,
+					"Key": 3341
+				},
+				{
+					"Name": "SmoothingConstantMs",
+					"DisplayName": "Smoothing Constant (MS)",
+					"Visibility": "Default",
+					"MinValue": 0,
+					"Type": "Real",
+					"Doc": "Enable parameter smoothing on the diffraction paths output from the Acoustics Engine.\n\nSet SmoothingConstantMs to a value greater than 0 to define the time constant (in milliseconds) for parameter smoothing.\nThe time constant of an exponential moving average is the amount of time for the smoothed response of a unit step function to reach 1 - 1/e ~= 63.2% of the original signal.\nA large value (eg. 500-1000 ms) results in less variance but introduces lag, which is a good choice when using conservative values for NumberOfPrimaryRays (eg. 5-10), MaxDiffractionPaths (eg. 1-3) or MovementThreshold ( > 1m ), in order to reduce overall CPU cost.\nA small value (eg. 10-100 ms) results in greater accuracy and faster convergence of rendering parameters. Set to 0 to disable path smoothing.",
+					"DefaultValue": 0.0,
+					"Key": 3342
+				},
+				{
+					"Name": "AdjacentRoomBleed",
+					"DisplayName": "Adjacent Room Bleed",
+					"Visibility": "Default",
+					"MinValue": 0,
+					"Type": "Real",
+					"Doc": "Set a global scaling factor that manipulates reverb send values.\n\nAdjacentRoomBleed affects the proportion of audio sent to adjacent rooms and to the emitter's current room.\nThis value is multiplied by AkPortalParams::AdjacentRoomBleed, which is used to scale reverb bleed for individual portals.\nWhen calculating reverb send amounts, each portal's aperture is multiplied by AdjacentRoomBleed, which alters its perceived size:\n- 1.0 (default): Maintains portals at their true geometric sizes (no scaling).\n- > 1.0: Increases the perceived size of all portals, which increases bleed into adjacent rooms.\n- < 1.0: Decreases the perceived size of all portals, which reduces bleed into adjacent rooms.\nValid range: (0.0 - infinity)\nNote: Values close to 0 might cause abrupt portal transitions.",
+					"DefaultValue": 1.0,
+					"Key": 3343
+				},
+				{
+					"Name": "EnableGeometricDiffractionAndTransmission",
+					"DisplayName": "Enable Geometric Diffraction And Transmission",
+					"Visibility": "Default",
+					"Type": "Boolean",
+					"Doc": "Enable computation of geometric diffraction and transmission paths for all sources that have the <b>Enable Diffraction and Transmission</b> box checked in the Positioning tab of the Wwise Property Editor.\n\nThis flag enables sound paths around (diffraction) and through (transmission) geometry (see AK::Acoustics::SetGeometry).\nSetting EnableGeometricDiffractionAndTransmission to false implies that geometry is only to be used for reflection calculation.\nDiffraction edges must be enabled on geometry for diffraction calculation (see AkGeometryParams).\nIf EnableGeometricDiffractionAndTransmission is false but a sound has <b>Enable Diffraction and Transmission</b> selected in the Positioning tab of the authoring tool, the sound will diffract through portals but will pass through geometry as if it is not there.\nOne would typically disable this setting in the case that the game intends to perform its own obstruction calculation, but geometry is still passed to Wwise Acoustics for reflection calculation.",
+					"DefaultValue": true,
+					"Key": 3344
+				},
+				{
+					"Name": "CalcEmitterVirtualPosition",
+					"DisplayName": "Calc Emitter Virtual Position",
+					"Visibility": "Default",
+					"Type": "Boolean",
+					"Doc": "An emitter that is diffracted through a portal or around geometry will have its apparent or virtual position calculated by Wwise Acoustics and passed on to the sound engine.",
+					"DefaultValue": true,
+					"Key": 3345
+				},
+				{
+					"Name": "TransmissionOperation",
+					"DisplayName": "Transmission Operation",
+					"Visibility": "Default",
+					"Type": "Integer",
+					"Doc": "The operation used to determine transmission loss on direct paths.",
+					"AllowedValues": [
+						{
+							"Value": 0,
+							"DisplayName": "Add",
+							"Doc": "Transmission loss of each hit surface is summed until it reaches 100%."
+						},
+						{
+							"Value": 1,
+							"DisplayName": "Multiply",
+							"Doc": "The inverse of transmission loss (1 - TL) is multiplied in succession, and the result inverted. With each hit surface, the effect of additional transmission loss is reduced. The total loss will approach but never reach 100% unless a surface with 100% loss is found."
+						},
+						{
+							"Value": 2,
+							"DisplayName": "Max",
+							"Doc": "The highest transmission loss of all hit surfaces is used."
+						}
+					],
+					"DefaultValue": 2,
+					"Key": 3346
+				},
+				{
+					"Name": "ClusteringMinPoints",
+					"DisplayName": "Clustering Min Points",
+					"Visibility": "Default",
+					"MinValue": 0,
+					"Type": "Integer",
+					"Doc": "Minimum number of emitters in a cluster. \n\nValues less than 2 disable the clustering.\nNote: Emitters with multi-positions are not clustered and are treated as independant emitters.\nNote: Changing an emitter from single to multi-positions with load balancing enabled (see LoadBalancingSpread) might lead to unknown behaviors for a few frames.",
+					"DefaultValue": 0,
+					"Key": 3347
+				},
+				{
+					"Name": "ClusteringMaxDistance",
+					"DisplayName": "Clustering Max Distance",
+					"Visibility": "Default",
+					"MinValue": 0,
+					"Type": "Real",
+					"Doc": "Max distance between emitters to be considered as neighbors. This distance is specified for the reference distance defined by ClusteringDeadZoneDistance.",
+					"DefaultValue": 5.0,
+					"Key": 3348
+				},
+				{
+					"Name": "ClusteringDeadZoneDistance",
+					"DisplayName": "Clustering Dead Zone Distance",
+					"Visibility": "Default",
+					"MinValue": 0,
+					"Type": "Real",
+					"Doc": "Defines a dead zone around the listener where no emitters are clusters.",
+					"DefaultValue": 10.0,
+					"Key": 3349
+				},
+				{
+					"Name": "ReflectionPathSearchEffort",
+					"DisplayName": "Reflection Path Search Effort",
+					"Visibility": "Default",
+					"MinValue": 0,
+					"MaxValue": 1,
+					"Type": "Real",
+					"Doc": "Balances the reflection engine quality vs CPU performance. A low value indicates faster processing but less accurate reflections. A high value indicates lower CPU performance but more accurate reflections. Range: 0-1.",
+					"DefaultValue": 1.0,
+					"Key": 3350
+				},
+				{
+					"Name": "DiffractionFieldNodeBudget",
+					"DisplayName": "Diffraction Field Node Budget",
+					"Visibility": "Default",
+					"MinValue": 0,
+					"Type": "Integer",
+					"Doc": "Per-frame node expansion budget for the Diffraction Field (experimental).\n\nThe Diffraction Field is an alternative to the per-emitter diffraction search: it builds a diffraction graph outward from the listener, incrementally over several frames, and shares it with all emitters, so that CPU usage does not grow linearly with the emitter count.\nSet to 0 (default) to deactivate the Diffraction Field and use the per-emitter diffraction search instead.\nSet to a value N > 0 to activate the Diffraction Field and allow up to N graph nodes to be expanded per audio frame. Use 128 as a starting point.\nEnableGeometricDiffractionAndTransmission must also be true for any geometric diffraction to occur.",
+					"DefaultValue": 0,
+					"Key": 3351
+				},
+				{
+					"Name": "MaxRoomPropagationDistance",
+					"DisplayName": "Max Room Propagation Distance",
+					"Visibility": "Default",
+					"MinValue": 0,
+					"Type": "Real",
+					"Doc": "Maximum distance in game units that sound can propagate through Portals. (Experimental)\n\nRooms beyond this distance are culled, saving CPU usage.\nSounds will not propagate through a Portal if the shortest path to the listener from that portal would exceed this limit.\nIf the distance between the Listener and the bounds of a Room, in a straight line, exceeds this limit, that Room will not emit any sound or create sends to other Rooms.\nThis has no impact on Room Game Object registration. Culled Rooms are visible in the Game Object 3D Viewer when the Culled Rooms option is enabled.\nThe recommended starting point is to set this to match the longest attenuation distance for sounds expected to propagate through Rooms and Portals.\n\nA value of 0 disables the limit.",
+					"DefaultValue": 0.0,
+					"Key": 3352
+				},
+				{
+					"Name": "SmoothingMode",
+					"DisplayName": "Smoothing Mode",
+					"Visibility": "Default",
+					"Type": "Integer",
+					"Doc": "Determines which parameters of the acoustic paths output from the Acoustics Engine are smoothed.\n\nControls which parameters the smoothing (see SmoothingConstantMs) is applied to.\n- 0 (All): All acoustic path parameters are smoothed every frame via an exponential moving average.\n- 1 (Fade Only): General acoustic path parameters, such as diffraction, transmission loss, distance, position and orientation, are not smoothed; they are applied immediately with no smoothing lag. Smoothing is applied only to the fade envelope of a path: paths that are discovered after a sound has started playing are faded in, and paths that are dropped while a sound is playing are faded out. Use this to hide artifacts caused by paths appearing and disappearing, without adding latency to the parameters of paths that persist.\nSmoothingConstantMs still controls the smoothing rate; this setting is orthogonal to it.\nRegardless of smoothing mode, smoothing is not applied when a sound first starts playing on a new game object, or when an inactive game object becomes active, to avoid unwanted fades at the beginning of sounds.",
+					"DefaultValue": 0,
+					"Key": 3353
+				}
+			]
+		},
+		{
+			"Name": "Profiler",
+			"DisplayName": "Profiler",
+			"Doc": "Options to configure the Wwise Profiler.",
+			"KeyStart": 3584,
+			"NumOptions": 3,
+			"Visibility": "Advanced",
+			"Options": [
+				{
+					"Name": "Hooks",
+					"DisplayName": "Hooks",
+					"Visibility": "Hidden",
+					"Type": "Pointer",
+					"Doc": "Hooks for the CPU profiler. Must be a pointer to an AkProfilerHooks instance.",
+					"DefaultValue": null,
+					"Key": 3584
+				},
+				{
+					"Name": "MonitorQueuePoolSize",
+					"DisplayName": "Monitor Queue Pool Size",
+					"Visibility": "Advanced",
+					"Type": "Integer",
+					"Doc": "Size of the monitoring queue, in bytes. This parameter is not used in Release build.",
+					"DefaultValue": 1048576,
+					"Key": 3585
+				},
+				{
+					"Name": "CPUMonitorQueueMaxSize",
+					"DisplayName": "CPU Monitor Queue Max Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Maximum size of the CPU monitoring queue, per thread, in bytes. This parameter is not used in Release build.",
+					"DefaultValue": 8388608,
+					"Key": 3586
+				}
+			]
+		},
+		{
+			"Name": "Comm",
+			"DisplayName": "Comm",
+			"Doc": "Options that affect network communications.",
+			"KeyStart": 3840,
+			"NumOptions": 7,
+			"Visibility": "Default",
+			"Options": [
+				{
+					"Name": "Enable",
+					"DisplayName": "Enable",
+					"Visibility": "Hidden",
+					"Type": "Boolean",
+					"Doc": "Initialize the AK::Comm module as part of AK::SoundEngine::Init.\n\nWhen set to false, the AK::Comm module is not initialized and it is not possible for Wwise Authoring to connect to the runtime.\n\nThis option applies to Debug and Profile configurations only. In the Release configuration, AK::Comm is always disabled.\n\nAK::Comm is an optional submodule. Failure to initialize AK::Comm will not fail AK::SoundEngine::Init. Clients can check whether AK::Comm successfully initialized by calling AK::Comm::IsInitialized.",
+					"DefaultValue": true,
+					"Key": 3840
+				},
+				{
+					"Name": "DiscoveryPort",
+					"DisplayName": "Discovery Port",
+					"Visibility": "Advanced",
+					"Type": "Integer",
+					"Doc": "Port to listen for Game Discovery broadcast messages from the authoring application to discover games running on the network.",
+					"DefaultValue": 24024,
+					"Key": 3841
+				},
+				{
+					"Name": "CommandPort",
+					"DisplayName": "Command Port",
+					"Visibility": "Advanced",
+					"Type": "Integer",
+					"Doc": "Port used by Wwise Profiler to exchange data with connected Authoring application. Set to 0 to request a dynamic/ephemeral port.",
+					"DefaultValue": 0,
+					"Key": 3842
+				},
+				{
+					"Name": "API",
+					"DisplayName": "API",
+					"Visibility": "Advanced",
+					"Type": "Integer",
+					"Doc": "Which API to prefer for Wwise Profiler communications.",
+					"AllowedValues": [
+						{
+							"Value": 0,
+							"DisplayName": "Socket",
+							"Doc": "Use the platform's default API for TCP/IP communication."
+						},
+						{
+							"Value": 1,
+							"DisplayName": "HTCS",
+							"Doc": "HTCS is prioritized if available."
+						}
+					],
+					"DefaultValue": 0,
+					"Key": 3843
+				},
+				{
+					"Name": "EnableSystemCommsManagement",
+					"DisplayName": "Enable System Comms Management",
+					"Visibility": "Hidden",
+					"Type": "Boolean",
+					"Doc": "Whether the operating system's communication library should be initialized and terminated alongside the sound engine.\n\nIf set to false, the game should load/initialize the console's communication library prior to calling this function.\nSet to false only if your game already uses sockets outside the lifetime of the sound engine.",
+					"DefaultValue": true,
+					"Key": 3844
+				},
+				{
+					"Name": "AppNetworkName",
+					"DisplayName": "App Network Name",
+					"Visibility": "Default",
+					"Type": "String",
+					"MaxLength": 255,
+					"Doc": "Optional name that will be displayed over network remote connection of Wwise. Maximum 255 characters.",
+					"DefaultValue": "Unspecified",
+					"Key": 3845
+				},
+				{
+					"Name": "ProxyServerUrl",
+					"DisplayName": "Proxy Server Url",
+					"Visibility": "Advanced",
+					"Type": "String",
+					"MaxLength": 255,
+					"Doc": "Optional URL of Comm proxy server (only applicable for platforms incapable of acting as raw UDP/TCP servers). Maximum 255 characters.",
+					"DefaultValue": "ws://localhost:8095/",
+					"Key": 3846
+				}
+			]
+		},
+		{
+			"Name": "Threads",
+			"DisplayName": "Threads",
+			"Doc": "Options for configuring the threads managed by Wwise.",
+			"KeyStart": 4096,
+			"NumOptions": 18,
+			"Visibility": "Hidden",
+			"Options": [
+				{
+					"Name": "PrimaryStreamDevice_Priority",
+					"DisplayName": "PrimaryStreamDevice Priority",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Priority of PrimaryStreamDevice thread. Range of values depends on platform. When set to -1, Wwise will automatically select an appropriate priority for the current platform.\n\nThe PrimaryStreamDevice thread is used by the StreamMgr's primary device to process I/O requests.",
+					"DefaultValue": -1,
+					"Key": 4096
+				},
+				{
+					"Name": "PrimaryStreamDevice_StackSize",
+					"DisplayName": "PrimaryStreamDevice Stack Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Stack size of PrimaryStreamDevice thread. When set to -1, Wwise will automatically determine an appropriate stack size for the current platform.\n\nThe PrimaryStreamDevice thread is used by the StreamMgr's primary device to process I/O requests.",
+					"DefaultValue": -1,
+					"Key": 4097
+				},
+				{
+					"Name": "PrimaryStreamDevice_AffinityMask",
+					"DisplayName": "PrimaryStreamDevice Affinity Mask",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Core affinity for PrimaryStreamDevice thread. When set to -1, Wwise will automatically determine an appropriate affinity mask for the current platform.",
+					"DefaultValue": -1,
+					"Key": 4098
+				},
+				{
+					"Name": "AudioMgr_Priority",
+					"DisplayName": "AudioMgr Priority",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Priority of AudioMgr thread. Range of values depends on platform. When set to -1, Wwise will automatically select an appropriate priority for the current platform.\n\nThe AudioMgr thread is used by the AudioMgr to process commands and produce audio.",
+					"DefaultValue": -1,
+					"Key": 4099
+				},
+				{
+					"Name": "AudioMgr_StackSize",
+					"DisplayName": "AudioMgr Stack Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Stack size of AudioMgr thread. When set to -1, Wwise will automatically determine an appropriate stack size for the current platform.\n\nThe AudioMgr thread is used by the AudioMgr to process commands and produce audio.",
+					"DefaultValue": -1,
+					"Key": 4100
+				},
+				{
+					"Name": "AudioMgr_AffinityMask",
+					"DisplayName": "AudioMgr Affinity Mask",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Core affinity for AudioMgr thread. When set to -1, Wwise will automatically determine an appropriate affinity mask for the current platform.",
+					"DefaultValue": -1,
+					"Key": 4101
+				},
+				{
+					"Name": "Suspend_Priority",
+					"DisplayName": "Suspend Priority",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Priority of Suspend thread. Range of values depends on platform. When set to -1, Wwise will automatically select an appropriate priority for the current platform.\n\nThe AudioMgr thread keeps the Sound Engine rendering when suspended.",
+					"DefaultValue": -1,
+					"Key": 4102
+				},
+				{
+					"Name": "Suspend_StackSize",
+					"DisplayName": "Suspend Stack Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Stack size of Suspend thread. When set to -1, Wwise will automatically determine an appropriate stack size for the current platform.\n\nThe AudioMgr thread keeps the Sound Engine rendering when suspended.",
+					"DefaultValue": -1,
+					"Key": 4103
+				},
+				{
+					"Name": "Suspend_AffinityMask",
+					"DisplayName": "Suspend Affinity Mask",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Core affinity for Suspend thread. When set to -1, Wwise will automatically determine an appropriate affinity mask for the current platform.",
+					"DefaultValue": -1,
+					"Key": 4104
+				},
+				{
+					"Name": "BankMgr_Priority",
+					"DisplayName": "BankMgr Priority",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Priority of BankMgr thread. Range of values depends on platform. When set to -1, Wwise will automatically select an appropriate priority for the current platform.\n\nThe BankMgr thread processes all bank and media operation.",
+					"DefaultValue": -1,
+					"Key": 4105
+				},
+				{
+					"Name": "BankMgr_StackSize",
+					"DisplayName": "BankMgr Stack Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Stack size of BankMgr thread. When set to -1, Wwise will automatically determine an appropriate stack size for the current platform.\n\nThe BankMgr thread processes all bank and media operation.",
+					"DefaultValue": -1,
+					"Key": 4106
+				},
+				{
+					"Name": "BankMgr_AffinityMask",
+					"DisplayName": "BankMgr Affinity Mask",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Core affinity for BankMgr thread. When set to -1, Wwise will automatically determine an appropriate affinity mask for the current platform.",
+					"DefaultValue": -1,
+					"Key": 4107
+				},
+				{
+					"Name": "Profiler_Priority",
+					"DisplayName": "Profiler Priority",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Priority of Profiler thread. Range of values depends on platform. When set to -1, Wwise will automatically select an appropriate priority for the current platform.\n\nThe Profiler thread processes network communications: executing live-edit actions from Authoring and sending back profiling data.",
+					"DefaultValue": -1,
+					"Key": 4108
+				},
+				{
+					"Name": "Profiler_StackSize",
+					"DisplayName": "Profiler Stack Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Stack size of Profiler thread. When set to -1, Wwise will automatically determine an appropriate stack size for the current platform.\n\nThe Profiler thread processes network communications: executing live-edit actions from Authoring and sending back profiling data.",
+					"DefaultValue": -1,
+					"Key": 4109
+				},
+				{
+					"Name": "Profiler_AffinityMask",
+					"DisplayName": "Profiler Affinity Mask",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Core affinity for Profiler thread. When set to -1, Wwise will automatically determine an appropriate affinity mask for the current platform.",
+					"DefaultValue": -1,
+					"Key": 4110
+				},
+				{
+					"Name": "JobWorker_Priority",
+					"DisplayName": "JobWorker Priority",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Priority of JobWorker thread. Range of values depends on platform. When set to -1, Wwise will automatically select an appropriate priority for the current platform.\n\nThe JobWorker thread pool processes chunks of work during audio rendering in a parallel fashion. The number of threads in the pool is specified by AkOption_JobMgr_NumWorkerThreads\n\nUsing these options, all JobWorker threads share the same thread properties. For finer control over priority and core affinity of individual threads in the pool, use AkOption_JobMgr_WorkerThreadProperties.",
+					"DefaultValue": -1,
+					"Key": 4111
+				},
+				{
+					"Name": "JobWorker_StackSize",
+					"DisplayName": "JobWorker Stack Size",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Stack size of JobWorker thread. When set to -1, Wwise will automatically determine an appropriate stack size for the current platform.\n\nThe JobWorker thread pool processes chunks of work during audio rendering in a parallel fashion. The number of threads in the pool is specified by AkOption_JobMgr_NumWorkerThreads\n\nUsing these options, all JobWorker threads share the same thread properties. For finer control over priority and core affinity of individual threads in the pool, use AkOption_JobMgr_WorkerThreadProperties.",
+					"DefaultValue": -1,
+					"Key": 4112
+				},
+				{
+					"Name": "JobWorker_AffinityMask",
+					"DisplayName": "JobWorker Affinity Mask",
+					"Visibility": "Hidden",
+					"Type": "Integer",
+					"Doc": "Core affinity for JobWorker thread. When set to -1, Wwise will automatically determine an appropriate affinity mask for the current platform.",
+					"DefaultValue": -1,
+					"Key": 4113
+				}
+			]
+		}
+	]
+}

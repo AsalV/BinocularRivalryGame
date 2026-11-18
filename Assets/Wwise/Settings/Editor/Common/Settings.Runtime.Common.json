@@ -1,0 +1,158 @@
+{
+	"Version": 1,
+	"Namespaces": [
+		{
+			"Name": "IntegrationBanks",
+			"DisplayName": "Banks",
+			"Doc": "Runtime settings for SoundBank loading and location.",
+			"Visibility": "Default",
+			"Options": [
+				{
+					"Name": "IsAutoBankEnabled",
+					"DisplayName": "AutoBank Enabled",
+					"Visibility": "Default",
+					"Type": "Boolean",
+					"Doc": "Whether Auto Bank is enabled in Wwise.",
+					"DefaultValue": true
+				},
+				{
+					"Name": "IsDecodedBankEnabled",
+					"DisplayName": "Decode Bank Enabled",
+					"Visibility": "Default",
+					"Type": "Boolean",
+					"Doc": "Whether Decoded Banks are enabled.",
+					"DefaultValue": false
+				},
+				{
+					"Name": "LoadBanksAsynchronously",
+					"DisplayName": "Load Banks Asynchronously",
+					"Visibility": "Advanced",
+					"Type": "Boolean",
+					"Doc": "Default settings for loading banks. This setting can be overriden by each bank.",
+					"DefaultValue": false
+				},
+				{
+					"Name": "SoundBanksBasePath",
+					"DisplayName": "SoundBanks Base Path",
+					"Visibility": "Default",
+					"Type": "String",
+					"Doc": "Path for the SoundBanks. This must contain one sub folder per platform, with the same as in the Wwise project.",
+					"DefaultValue": "Audio/GeneratedSoundBanks"
+				},
+				{
+					"Name": "SoundBankPersistentDataPath",
+					"DisplayName": "SoundBanks Persistent Base Path",
+					"Visibility": "Advanced",
+					"Type": "String",
+					"Doc": "Sets the sub-folder underneath UnityEngine.Application.persistentDataPath that will be used as the SoundBank base path. This is useful when the Init.bnk needs to be downloaded. Setting this to an empty string uses the typical SoundBank base path resolution. Setting this to \".\" uses UnityEngine.Application.persistentDataPath.",
+					"DefaultValue": ""
+				}
+			]
+		},
+		{
+			"Name": "IntegrationFocusLoss",
+			"DisplayName": "Focus Loss",
+			"Doc": "Runtime settings applied when the editor or game loses focus.",
+			"Visibility": "Default",
+			"Options": [
+				{
+					"Name": "RenderDuringFocusLoss",
+					"DisplayName": "Render Audio During Focus Loss",
+					"Visibility": "Advanced",
+					"Type": "Boolean",
+					"Doc": "Determines whether to continue rendering audio while audio is suspended during focus loss. Only applicable if <b>Suspend Audio During Focus Loss</b> is enabled.",
+					"DefaultValue": false
+				},
+				{
+					"Name": "SuspendAudioDuringFocusLoss",
+					"DisplayName": "Suspend Audio During Focus Loss",
+					"Visibility": "Advanced",
+					"Type": "Boolean",
+					"Doc": "Determines whether to suspend audio during loss of focus of the editor or game.",
+					"DefaultValue": true
+				}
+			]
+		},
+		{
+			"Name": "IntegrationLogging",
+			"DisplayName": "Logging",
+			"Doc": "Runtime settings for Wwise engine and integration logging.",
+			"Visibility": "Default",
+			"Options": [
+				{
+					"Name": "IsEngineLoggingEnabled",
+					"DisplayName": "Engine Logging Enabled",
+					"Visibility": "Default",
+					"Type": "Boolean",
+					"Doc": "Enable Wwise engine logging. This is used to turn on/off the logging of the Wwise engine.",
+					"DefaultValue": true
+				},
+				{
+					"Name": "WwiseLoggerLevel",
+					"DisplayName": "Wwise Logger Level",
+					"Visibility": "Default",
+					"Type": "String",
+					"Doc": "Verbosity of the Wwise Unity integration logger. We recommend using at least the Error level when building your project; setting this to None can cause builds to succeed with silent Wwise failures.",
+					"DefaultValue": "Log",
+					"AllowedValues": [
+						{
+							"Value": "None",
+							"DisplayName": "None",
+							"Doc": "Silence all logs. Note: This will cause builds to pass, even if Wwise has errors."
+						},
+						{
+							"Value": "Error",
+							"DisplayName": "Error",
+							"Doc": "Only log Errors."
+						},
+						{
+							"Value": "Warning",
+							"DisplayName": "Warning",
+							"Doc": "Only log Errors and Warnings."
+						},
+						{
+							"Value": "Log",
+							"DisplayName": "Log",
+							"Doc": "Default Level."
+						},
+						{
+							"Value": "Verbose",
+							"DisplayName": "Verbose",
+							"Doc": "Verbose logging."
+						},
+						{
+							"Value": "VeryVerbose",
+							"DisplayName": "Very Verbose",
+							"Doc": "Very verbose logging."
+						}
+					]
+				}
+			]
+		},
+		{
+			"Name": "Integration",
+			"DisplayName": "Miscellaneous",
+			"Doc": "Runtime settings for the Wwise Unity integration",
+			"Visibility": "Default",
+			"Options": [
+				{
+					"Name": "DefaultListenerScalingFactor",
+					"DisplayName": "Default Listener Scaling Factor",
+					"Visibility": "Default",
+					"MinValue": "0",
+					"Type": "Real",
+					"Doc": "The default value of the \"Attenuation Scaling Factor\" when an AkAudioListener is created.",
+					"DefaultValue": 1.0
+				},
+				{
+					"Name": "StartupLanguage",
+					"DisplayName": "Startup Language",
+					"Visibility": "Default",
+					"Type": "String",
+					"Doc": "Language sub-folder used at startup.",
+					"DefaultValue": "English(US)"
+				}
+			]
+		}
+	]
+}
