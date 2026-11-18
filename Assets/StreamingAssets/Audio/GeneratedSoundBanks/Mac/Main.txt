@@ -1,0 +1,18 @@
+Event	ID	Name			Wwise Object Path	Notes
+	81759402	Play_switch			\Default Work Unit\Play_switch	
+	380690114	Setstate_explore			\Default Work Unit\Setstate_explore	
+	3351634861	Setstate_tension			\Default Work Unit\Setstate_tension	
+	3608837791	Setstate_none			\Default Work Unit\Setstate_none	
+
+State Group	ID	Name			Wwise Object Path	Notes
+	1176052424	Location			\Default Work Unit\Location	
+
+State	ID	Name	State Group			Notes
+	287033707	Exploreroom	Location			
+	748895195	None	Location			
+	1896239188	Tensionroom	Location			
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	136992751	tension track	.cache\FF\{FF650329-A722-EED2-60FF-E89AB4276C85}.wem		\Containers\Default Work Unit\locationmusicswitch\tension playlist\tension segment\tension track		8418560
+	623217155	explore	.cache\86\{86FD18C6-F382-E36B-08F1-08E9D2CEA7D5}.wem		\Containers\Default Work Unit\locationmusicswitch\explore playlist\explore segment\explore		15950864
+
