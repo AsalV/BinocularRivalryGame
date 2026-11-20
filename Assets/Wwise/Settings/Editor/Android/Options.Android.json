@@ -1,0 +1,122 @@
+{
+	"Version": 1,
+	"Namespaces": [
+		{
+			"Name": "Output",
+			"DisplayName": "Output",
+			"Doc": "Options that configure the behavior of the primary audio output device.",
+			"KeyStart": 2816,
+			"NumOptions": 1,
+			"Visibility": "Default",
+			"Options": [
+				{
+					"Name": "PanningRule",
+					"DisplayName": "Panning Rule",
+					"Visibility": "Default",
+					"DefaultValue": 1,
+					"Key": 2818
+				}
+			]
+		},
+		{
+			"Name": "Android",
+			"DisplayName": "Android\u2122",
+			"Doc": "Runtime options specific to the Android\u2122 platform.",
+			"ConditionalMacro": "AK_ANDROID",
+			"KeyStart": 4352,
+			"NumOptions": 8,
+			"Visibility": "Default",
+			"Options": [
+				{
+					"Name": "AllowAAudio",
+					"DisplayName": "Allow AAudio",
+					"Visibility": "Default",
+					"Type": "Boolean",
+					"Doc": "Allow using AAudio API on devices that support it (Android 8.1 and above).\n\nWhen AAudio is allowed and available, it takes precedence over OpenSL ES for reduced latency.",
+					"DefaultValue": true,
+					"Key": 4352
+				},
+				{
+					"Name": "AllowDolbyAtmos",
+					"DisplayName": "Allow Dolby Atmos",
+					"Visibility": "Default",
+					"Type": "Boolean",
+					"Doc": "Allow using Dolby Atmos 3D Audio technology on supported devices.\n\nWhen Dolby Atmos is allowed and available, it takes precedence over Android Spatial Audio for reduced latency over wired headphones.\n\nOn Android platforms where Dolby Car eXperience (DCX) is present, when AAudio is selected as an audio API and AllowDolbyAtmos is enabled, the system sink will attempt to retrieve the preferred DCX channel configuration from the Android audio platform and use it.",
+					"DefaultValue": true,
+					"Key": 4353
+				},
+				{
+					"Name": "AllowAndroidSpatializer",
+					"DisplayName": "Allow Android Spatializer",
+					"Visibility": "Default",
+					"Type": "Boolean",
+					"Doc": "Allow using Android Spatializer API for 3D Audio on supported devices.\n\nNote that Android Spatializer does not support the \"Fast Audio Path\", and can suffer from noticeable latency for interactive audio purposes.",
+					"DefaultValue": false,
+					"Key": 4354
+				},
+				{
+					"Name": "AudioPath",
+					"DisplayName": "Audio Path",
+					"Visibility": "Advanced",
+					"Type": "Integer",
+					"Doc": "Which system audio path to use.",
+					"AllowedValues": [
+						{
+							"Value": 0,
+							"DisplayName": "Legacy",
+							"Doc": "The legacy path has the highest latency but best compatibility with the widest range of devices."
+						},
+						{
+							"Value": 1,
+							"DisplayName": "Low-Latency",
+							"Doc": "Attempt to use a low-latency path to the system audio mixer. This gives improved latency and good compatibility. Devices that don't support a low-latency path automatically fall back to the Legacy path."
+						},
+						{
+							"Value": 2,
+							"DisplayName": "Exclusive",
+							"Doc": "Attempt to open an exclusive audio stream to the audio driver, bypassing the system audio mixer for best latency. When available, this mode gives the best latency. However, it has several drawbacks to be aware of:\n- App audio will not be mixed with other apps. Other apps will be prevented from using exclusive mode while this output stream is active.\n- Screen recordings may not contain any audio.\n- When the app is put in the background, there is a possibility that another app steals this path. When the Wwise app comes back to the foreground, this mode can become unavailable.\n- Audio will bypass system-level DSP effects like volume normalization and spatialization. 3D Audio will not work, and output volume may be abnormally loud or quiet.\n- Other functionality such as audio recording may be disabled when using this path.\n\nNot all devices support exclusive mode. Devices that don't support exclusive mode can fallback to either Low-Latency or Legacy depending on device capabilities."
+						}
+					],
+					"DefaultValue": 1,
+					"Key": 4355
+				},
+				{
+					"Name": "JavaVM",
+					"DisplayName": "JavaVM",
+					"Visibility": "Hidden",
+					"Type": "Pointer",
+					"Doc": "Active JavaVM for the app, used for internal system calls. This parameter is required for Sound Engine initialization to succeed.",
+					"DefaultValue": null,
+					"Key": 4356
+				},
+				{
+					"Name": "ActivityReference",
+					"DisplayName": "Activity Reference",
+					"Visibility": "Hidden",
+					"Type": "Pointer",
+					"Doc": "JNI pointer to android.app.Activity instance for this application. A value of type jobject is expected. This parameter is required for Sound Engine initialization to succeed.",
+					"DefaultValue": null,
+					"Key": 4357
+				},
+				{
+					"Name": "ZipInterface",
+					"DisplayName": "Zip Interface",
+					"Visibility": "Hidden",
+					"Type": "Pointer",
+					"Doc": "Collection of pointers to libzip functions. Must be a pointer to an AkZipInterface instance.\n\nWhen specified, the StreamMgr can use libzip to read files from an OBB package. If your application does not use OBB packages, this option can be left unset.",
+					"DefaultValue": null,
+					"Key": 4358
+				},
+				{
+					"Name": "OpenSLEngine",
+					"DisplayName": "OpenSL Engine",
+					"Visibility": "Hidden",
+					"Type": "Pointer",
+					"Doc": "OpenSL engine reference to use for audio output.\n\nMust be a value of type SLObjectItf. Only set this option if Wwise must use an existing OpenSL engine managed by the application instead of instantiating a new one. This option is ignored when AAudio API is used for audio output.",
+					"DefaultValue": null,
+					"Key": 4359
+				}
+			]
+		}
+	]
+}

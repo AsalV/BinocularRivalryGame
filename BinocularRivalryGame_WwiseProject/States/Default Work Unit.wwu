@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{627132D0-D613-4D7E-9E0B-8DA308CDB547}" SchemaVersion="139">
+	<States>
+		<WorkUnit Name="Default Work Unit" ID="{627132D0-D613-4D7E-9E0B-8DA308CDB547}" PersistMode="Standalone">
+			<ChildrenList>
+				<StateGroup Name="location" ID="{F4608617-5D41-4D5F-98E5-268F93026BF0}">
+					<ChildrenList>
+						<State Name="None" ID="{D5D454A5-264A-4649-BA0E-2AC8F6D67131}"/>
+						<State Name="explore" ID="{BFD47C4C-FF7C-46F9-8DB4-93E1774735F8}"/>
+						<State Name="tension" ID="{7AA3638D-9738-4159-8A3F-1CE098972EB0}"/>
+					</ChildrenList>
+				</StateGroup>
+			</ChildrenList>
+		</WorkUnit>
+	</States>
+</WwiseDocument>

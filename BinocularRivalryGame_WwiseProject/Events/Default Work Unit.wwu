@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{68C38B26-2F64-435B-A245-C6886F829E92}" SchemaVersion="139">
+	<Events>
+		<WorkUnit Name="Default Work Unit" ID="{68C38B26-2F64-435B-A245-C6886F829E92}" PersistMode="Standalone">
+			<ChildrenList>
+				<Event Name="Play_start" ID="{63BFA383-31A0-4D62-9FEB-D0E67AFB3A37}">
+					<ChildrenList>
+						<Action Name="" ID="{3C70CBA6-3AE2-4529-B2B9-14884AD86287}" ShortID="199277907">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Locationswitch" ID="{3D34B2AF-3981-4812-B146-ADB4DC29564E}" WorkUnitID="{1DA65AAA-C660-4216-8FDD-832F40419867}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+						<Action Name="" ID="{8DCB4A8B-62F9-4B4B-8516-A541071EE99A}" ShortID="948741997">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="22"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="explore" ID="{BFD47C4C-FF7C-46F9-8DB4-93E1774735F8}" WorkUnitID="{627132D0-D613-4D7E-9E0B-8DA308CDB547}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Set_State_tension" ID="{2CFB9348-D6F1-46CD-88ED-C732281CAC35}">
+					<ChildrenList>
+						<Action Name="" ID="{A32AEFD7-DA9D-4276-9A3A-A3C53BB3FF12}" ShortID="460752761">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="22"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="tension" ID="{7AA3638D-9738-4159-8A3F-1CE098972EB0}" WorkUnitID="{627132D0-D613-4D7E-9E0B-8DA308CDB547}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+			</ChildrenList>
+		</WorkUnit>
+	</Events>
+</WwiseDocument>

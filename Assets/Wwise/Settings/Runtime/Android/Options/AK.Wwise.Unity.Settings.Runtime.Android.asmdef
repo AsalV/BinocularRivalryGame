@@ -1,0 +1,20 @@
+{
+    "name": "AK.Wwise.Unity.Settings.Runtime.Android",
+    "rootNamespace": "",
+    "references": [
+        "AK.Wwise.Unity.API",
+        "AK.Wwise.Unity.Settings.Runtime",
+        "AK.Wwise.Unity.Logging"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "UNITY_ANDROID"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

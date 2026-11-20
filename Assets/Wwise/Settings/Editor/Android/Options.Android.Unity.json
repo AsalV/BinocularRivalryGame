@@ -1,0 +1,15 @@
+{
+	"Version": 1,
+	"Namespaces": [
+		{
+			"Name": "Threads",
+			"Options": [
+				{
+					"Name": "AudioMgr_StackSize",
+					"Type": "Integer",
+					"DefaultValue": 524288
+				}
+			]
+		}
+	]
+}

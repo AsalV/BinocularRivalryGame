@@ -1,0 +1,113 @@
+{
+ "SoundBanksInfo": {
+  "Platform": "Windows",
+  "BasePlatform": "Windows",
+  "SchemaVersion": "16",
+  "SoundBankVersion": "176",
+  "SoundBanks": [
+   {
+    "Id": "1764570876",
+    "Type": "User",
+    "GUID": "{A8754C45-8114-499F-8DB9-E2788924E968}",
+    "Language": "SFX",
+    "Hash": "{874A622F-43B5-4635-7121-7823C3F8877A}",
+    "ObjectPath": "\\SoundBanks\\Default Work Unit\\Main2",
+    "ShortName": "Main2",
+    "Path": "Main2.bnk",
+    "Media": [
+     {
+      "Id": "2471992",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "explore104.37.wav",
+      "CachePath": "86/{86FD18C6-F382-E36B-08F1-08E9D2CEA7D5}.wem"
+     },
+     {
+      "Id": "532724992",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "tension104.4.wav",
+      "CachePath": "60/{6098790A-7F30-49D3-D004-12E1A5CBD82D}.wem"
+     }
+    ],
+    "Events": [
+     {
+      "Id": "2230670290",
+      "Name": "Play_start",
+      "ObjectPath": "\\Events\\Default Work Unit\\Play_start",
+      "GUID": "{63BFA383-31A0-4D62-9FEB-D0E67AFB3A37}",
+      "DurationType": "Infinite",
+      "SwitchContainers": [
+       {
+        "SwitchValue": {
+         "GroupType": "State",
+         "GroupId": "1176052424",
+         "Id": "579523862",
+         "GUID": "{BFD47C4C-FF7C-46F9-8DB4-93E1774735F8}"
+        },
+        "MediaRefs": [
+         {
+          "Id": "2471992"
+         }
+        ]
+       },
+       {
+        "SwitchValue": {
+         "GroupType": "State",
+         "GroupId": "1176052424",
+         "Id": "1571361561",
+         "GUID": "{7AA3638D-9738-4159-8A3F-1CE098972EB0}"
+        },
+        "MediaRefs": [
+         {
+          "Id": "532724992"
+         }
+        ]
+       }
+      ],
+      "ActionSetState": [
+       {
+        "GroupId": "1176052424",
+        "Id": "579523862",
+        "Name": "explore",
+        "ObjectPath": "\\States\\Default Work Unit\\location\\explore",
+        "GUID": "{BFD47C4C-FF7C-46F9-8DB4-93E1774735F8}"
+       }
+      ]
+     }
+    ],
+    "StateGroups": [
+     {
+      "Id": "1176052424",
+      "Name": "location",
+      "ObjectPath": "\\States\\Default Work Unit\\location",
+      "GUID": "{F4608617-5D41-4D5F-98E5-268F93026BF0}",
+      "States": [
+       {
+        "Id": "579523862",
+        "Name": "explore",
+        "ObjectPath": "\\States\\Default Work Unit\\location\\explore",
+        "GUID": "{BFD47C4C-FF7C-46F9-8DB4-93E1774735F8}"
+       },
+       {
+        "Id": "748895195",
+        "Name": "None",
+        "ObjectPath": "\\States\\Default Work Unit\\location\\None",
+        "GUID": "{D5D454A5-264A-4649-BA0E-2AC8F6D67131}"
+       },
+       {
+        "Id": "1571361561",
+        "Name": "tension",
+        "ObjectPath": "\\States\\Default Work Unit\\location\\tension",
+        "GUID": "{7AA3638D-9738-4159-8A3F-1CE098972EB0}"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "FileHash": "{5B69C633-90ED-150A-2F42-1F47452C649C}"
+ }
+}

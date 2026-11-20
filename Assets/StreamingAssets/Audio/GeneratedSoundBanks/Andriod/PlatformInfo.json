@@ -1,0 +1,38 @@
+{
+ "PlatformInfo": {
+  "Platform": {
+   "Name": "Android",
+   "BasePlatform": "Android",
+   "Generator": "2026.1.4.9341"
+  },
+  "RootPaths": {
+   "ProjectRoot": "../../../../../BinocularRivalryGame_WwiseProject",
+   "SourceFilesRoot": "../../../../../BinocularRivalryGame_WwiseProject/.cache",
+   "SoundBanksRoot": ".",
+   "ExternalSourcesInputFile": "",
+   "ExternalSourcesOutputRoot": "../../../../../BinocularRivalryGame_WwiseProject/GeneratedSoundBanks/Android"
+  },
+  "DefaultAlign": "16",
+  "Settings": {
+   "AutoSoundBankDefinition": "false",
+   "CopyLooseStreamedMediaFiles": "true",
+   "SubFoldersForGeneratedFiles": "false",
+   "RemoveUnusedGeneratedFiles": "true",
+   "SourceControlGeneratedFiles": "false",
+   "GenerateHeaderFile": "false",
+   "GenerateContentTxtFile": "true",
+   "GenerateMetadataXML": "false",
+   "GenerateMetadataJSON": "true",
+   "GenerateAllBanksMetadata": "false",
+   "GeneratePerBankMetadata": "true",
+   "UseSoundBankNames": "true",
+   "AllowExceedingMaxSize": "false",
+   "MaxAttenuationInfo": "true",
+   "EstimatedDurationInfo": "true",
+   "PrintObjectGuid": "true",
+   "PrintObjectPath": "true",
+   "PrintObjectColor": "true"
+  },
+  "FileHash": "{83174868-C94D-6AB8-7508-8A4076A927CD}"
+ }
+}

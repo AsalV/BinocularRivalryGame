@@ -1,0 +1,43 @@
+{
+ "ProjectInfo": {
+  "Project": {
+   "Name": "BinocularRivalryGame_WwiseProject",
+   "GUID": "{B1A98152-C950-4AA5-8938-40F2D8D66502}",
+   "Generator": "2026.1.4.9341"
+  },
+  "CacheRoot": "../.cache",
+  "Platforms": [
+   {
+    "Name": "Android",
+    "GUID": "{A2D401DE-0000-0000-0000-000000000000}",
+    "BasePlatform": "Android",
+    "BasePlatformGUID": "{A2D401DE-B8B6-4FEB-8142-137C34D507CA}",
+    "Path": "../../Assets/StreamingAssets/Audio/GeneratedSoundBanks/Andriod"
+   },
+   {
+    "Name": "Mac",
+    "GUID": "{9C6217D5-0000-0000-0000-000000000000}",
+    "BasePlatform": "Mac",
+    "BasePlatformGUID": "{9C6217D5-DD11-4795-87C1-6CE02853C540}",
+    "Path": "../../Assets/StreamingAssets/Audio/GeneratedSoundBanks/Mac"
+   },
+   {
+    "Name": "Windows",
+    "GUID": "{6E0CB257-0000-0000-0000-000000000000}",
+    "BasePlatform": "Windows",
+    "BasePlatformGUID": "{6E0CB257-C6C8-4C5C-8366-2740DFC441EB}",
+    "Path": "../../Assets/StreamingAssets/Audio/GeneratedSoundBanks/Windows"
+   }
+  ],
+  "Languages": [
+   {
+    "Name": "English(US)",
+    "Id": "684519430",
+    "GUID": "{B73B3B75-BEE2-48AF-BB56-02359D8C8898}",
+    "Default": "true",
+    "UseAsStandIn": "true"
+   }
+  ],
+  "FileHash": "{BD3A9EFC-D09E-5718-9F03-6C24046F00B4}"
+ }
+}

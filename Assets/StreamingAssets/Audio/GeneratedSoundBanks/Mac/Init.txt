@@ -1,10 +1,10 @@
 State Group	ID	Name			Wwise Object Path	Notes
-	1176052424	Location			\Default Work Unit\Location	
+	1176052424	location			\Default Work Unit\location	
 
 State	ID	Name	State Group			Notes
-	287033707	Exploreroom	Location			
-	748895195	None	Location			
-	1896239188	Tensionroom	Location			
+	579523862	explore	location			
+	748895195	None	location			
+	1571361561	tension	location			
 
 Audio Bus	ID	Name			Wwise Object Path	Notes
 	2246998526	Main Audio Bus			\Default Work Unit\Main Audio Bus	

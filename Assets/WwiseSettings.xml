@@ -3,7 +3,7 @@
   <CopySoundBanksAsPreBuildStep>true</CopySoundBanksAsPreBuildStep>
   <GenerateSoundBanksAsPreBuildStep>false</GenerateSoundBanksAsPreBuildStep>
   <WwiseStreamingAssetsPath>Audio/GeneratedSoundBanks</WwiseStreamingAssetsPath>
-  <RootOutputPath>../../../4.7/VR/binocular notes/binocularrivalry/GeneratedSoundBanks/</RootOutputPath>
+  <RootOutputPath>StreamingAssets/Audio/GeneratedSoundBanks</RootOutputPath>
   <CreatedPicker>true</CreatedPicker>
   <CreateWwiseGlobal>true</CreateWwiseGlobal>
   <CreateWwiseListener>true</CreateWwiseListener>
@@ -13,7 +13,7 @@
   <ShowAcousticsWarningMsg>true</ShowAcousticsWarningMsg>
   <WwiseInstallationPathMac>/Applications/Audiokinetic/Wwise_2026.1.4.9341/Wwise.app</WwiseInstallationPathMac>
   <WwiseInstallationPathWindows />
-  <WwiseProjectPath>../../../4.7/VR/binocular notes/binocularrivalry/binocularrivalry.wproj</WwiseProjectPath>
+  <WwiseProjectPath>../BinocularRivalryGame_WwiseProject/BinocularRivalryGame_WwiseProject.wproj</WwiseProjectPath>
   <UseWaapi>true</UseWaapi>
   <WaapiPort>8080</WaapiPort>
   <WaapiIP>127.0.0.1</WaapiIP>

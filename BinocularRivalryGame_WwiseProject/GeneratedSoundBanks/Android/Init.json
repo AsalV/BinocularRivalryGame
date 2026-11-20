@@ -1,0 +1,77 @@
+{
+ "SoundBanksInfo": {
+  "Platform": "Android",
+  "BasePlatform": "Android",
+  "SchemaVersion": "16",
+  "SoundBankVersion": "176",
+  "SoundBanks": [
+   {
+    "Id": "1355168291",
+    "Type": "User",
+    "GUID": "{701ECBBD-9C7B-4030-8CDB-749EE5D1C7B9}",
+    "Language": "SFX",
+    "Hash": "{9942076D-FB37-288F-81BD-555CB536C352}",
+    "ObjectPath": "Init",
+    "ShortName": "Init",
+    "Path": "Init.bnk",
+    "Plugins": {
+     "AudioDevices": [
+      {
+       "Id": "2317455096",
+       "Name": "No_Output",
+       "ObjectPath": "\\Devices\\Default Work Unit\\No_Output",
+       "GUID": "{1F3286C3-A6E3-4617-8065-1F74EBCE593D}",
+       "LibName": "No Output",
+       "LibId": "11862023"
+      },
+      {
+       "Id": "3859886410",
+       "Name": "System",
+       "ObjectPath": "\\Devices\\Default Work Unit\\System",
+       "GUID": "{D9FE019A-CE14-4FC3-B671-16478E5FAD79}",
+       "LibName": "System",
+       "LibId": "11403271"
+      }
+     ]
+    },
+    "Busses": [
+     {
+      "Id": "2246998526",
+      "Name": "Main Audio Bus",
+      "ObjectPath": "\\Busses\\Default Work Unit\\Main Audio Bus",
+      "GUID": "{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}"
+     }
+    ],
+    "StateGroups": [
+     {
+      "Id": "1176052424",
+      "Name": "location",
+      "ObjectPath": "\\States\\Default Work Unit\\location",
+      "GUID": "{F4608617-5D41-4D5F-98E5-268F93026BF0}",
+      "States": [
+       {
+        "Id": "579523862",
+        "Name": "explore",
+        "ObjectPath": "\\States\\Default Work Unit\\location\\explore",
+        "GUID": "{BFD47C4C-FF7C-46F9-8DB4-93E1774735F8}"
+       },
+       {
+        "Id": "748895195",
+        "Name": "None",
+        "ObjectPath": "\\States\\Default Work Unit\\location\\None",
+        "GUID": "{D5D454A5-264A-4649-BA0E-2AC8F6D67131}"
+       },
+       {
+        "Id": "1571361561",
+        "Name": "tension",
+        "ObjectPath": "\\States\\Default Work Unit\\location\\tension",
+        "GUID": "{7AA3638D-9738-4159-8A3F-1CE098972EB0}"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "FileHash": "{6E3DBE83-442F-7CFD-0F9C-2181B0B9707B}"
+ }
+}
